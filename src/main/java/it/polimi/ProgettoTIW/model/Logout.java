@@ -1,0 +1,24 @@
+package it.polimi.ProgettoTIW.model;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import java.io.IOException;
+
+@WebServlet("/Logout")
+public class Logout extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    
+    public Logout()
+    {
+    	super();
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getSession().invalidate();
+        response.sendRedirect("login.html"); // Adjust the redirection page as needed
+    }
+}

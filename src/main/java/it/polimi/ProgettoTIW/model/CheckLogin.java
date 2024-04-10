@@ -1,0 +1,86 @@
+package it.polimi.ProgettoTIW.model;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import org.apache.*;
+import it.polimi.ProgettoTIW.beans.user;
+import it.polimi.ProgettoTIW.DAO.userDAO;
+
+@WebServlet("/CheckLogin")
+public class CheckLogin extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private Connection connection = null;
+
+    public void init() throws ServletException {
+        try {
+            ServletContext context = getServletContext();
+            String driver = context.getInitParameter("dbDriver");
+            String url = context.getInitParameter("dbUrl");
+            String user = context.getInitParameter("dbUser");
+            String password = context.getInitParameter("dbPassword");
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, user, password);
+
+        } catch (ClassNotFoundException e) {
+            throw new UnavailableException("Can't load database driver");
+        } catch (SQLException e) {
+            throw new UnavailableException("Couldn't get db connection");
+        }
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String usrn = request.getParameter("username");
+        String pwd = request.getParameter("password");
+        HttpSession session = request.getSession();
+
+        if (usrn == null || pwd == null || usrn.isEmpty() || pwd.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Credentials must be not null");
+            return;
+        }
+
+        userDAO userDao = new userDAO(connection);
+        user user = null;
+        try {
+            user = userDao.checkCredentials(usrn, pwd);
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Internal server error, retry later");
+            return;
+        }
+
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("User not registered. Create a new one");
+        } else {
+            request.getSession().setAttribute("user", user);
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().println(usrn);
+            request.getSession().setAttribute("user", user);
+            response.sendRedirect(request.getServletContext().getContextPath()+"/GoToHomePage");
+        }
+    }
+
+    public void destroy() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException sqle) {
+        }
+    }
+}
