@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class Album {
     //primary key
+    //i added username because i use it to retrieve data from the list of album
+	private String Username;
     private Integer User_id;
     private String Title;
 
@@ -19,6 +21,11 @@ public class Album {
 
     public void setUser_id(Integer user_id) {
         User_id = user_id;
+    }
+    
+    public void setUsername(String Username)
+    {
+    	this.Username = Username;
     }
 
     public Integer getUser_id() {

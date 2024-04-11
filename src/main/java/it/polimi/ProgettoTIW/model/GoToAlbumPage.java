@@ -64,6 +64,7 @@ public class GoToAlbumPage extends HttpServlet {
         List<Image> images;
 
         try {
+
             album = albumDao.findAlbumById(albumId);
             if (album == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);

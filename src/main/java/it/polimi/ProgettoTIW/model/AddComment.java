@@ -19,11 +19,11 @@ import it.polimi.tiw.missions.dao.CommentDAO;
 import it.polimi.tiw.missions.utils.ConnectionHandler;
 
 @WebServlet("/AddComment")
-public class AddCommentServlet extends HttpServlet {
+public class AddComment extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
     
-    public AddCommentServlet()
+    public AddComment()
     {
     	super();
     }

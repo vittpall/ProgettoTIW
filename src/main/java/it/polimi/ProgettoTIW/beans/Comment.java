@@ -3,9 +3,9 @@ package it.polimi.ProgettoTIW.beans;
 import java.util.Date;
 
 public class Comment {
-    //primary key
+
     private Integer Image_id;
-    private Integer User_id;
+    private Integer Id;
     private Date Publication_date;
     
     private String Text;
@@ -15,16 +15,16 @@ public class Comment {
     	this.Text = Text;
     }
 
-    public void setUser_id(Integer user_id) {
-        User_id = user_id;
+    public void setUser_id(Integer Id) {
+        this.Id = Id;
     }
     
     public void setImage_id(Integer image_id) {
-        Image_id = image_id;
+        this.Image_id = image_id;
     }
 
     public void setPublication_date(Date publication_date) {
-        Publication_date = publication_date;
+        this.Publication_date = publication_date;
     }
 
     public String getText()
@@ -41,7 +41,7 @@ public class Comment {
     }
 
     public Integer getUser_id() {
-        return User_id;
+        return Id;
     }
 
 

@@ -1,6 +1,7 @@
 package it.polimi.ProgettoTIW.model;
 
 import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,20 +14,16 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.catalina.User;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.ProgettoTIW.beans.Album;
-import it.polimi.ProgettoTIW.beans.album;
-import it.polimi.ProgettoTIW.beans.user;
+import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.DAO.albumDAO;
 import it.polimi.ProgettoTIW.DAO.userDAO;
 
@@ -68,11 +65,13 @@ public class GoToHomePage extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        user user = (user) request.getSession().getAttribute("user");
+    	
+    	HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        List<User> UserList;
         
         String loginpath = getServletContext().getContextPath() + "/index.html";
         
-		HttpSession session = request.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
 			response.sendRedirect(loginpath);
 			return;
@@ -85,7 +84,6 @@ public class GoToHomePage extends HttpServlet {
         userDAO userDao = new userDAO(connection);
         try {
             UserList = userDao.getAllUsers();
-            request.setAttribute("users", users);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Unable to retrieve albums");
@@ -93,14 +91,15 @@ public class GoToHomePage extends HttpServlet {
         }
 
         albumDAO albumDao = new albumDAO(connection);
-        List<Album> Users;
-        List<List<Album>> OtherAlbum;
+        List<Album> UserAlbum;
+        List<List<Album>> OtherUserAlbum = new ArrayList<>();
         try {
-            List<Album> UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
+            UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
             for(User u : UserList)
             {
-            	if(u.getUsername().equals(user.getUsername()))
-            	OtherAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
+            	//find all the albums and add them to OtherAlbum except when they refer to the user of the session 
+            	if(!u.getUsername().equals(user.getUsername()))
+            	OtherUserAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
             }
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -108,9 +107,13 @@ public class GoToHomePage extends HttpServlet {
             return;
         }
         
-
-
-
+		String path = getServletContext().getContextPath() + "/Home.html";
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		ctx.setVariable("UserAlbum", UserAlbum);
+		ctx.setVariable("OtherUserAlbum", OtherUserAlbum);
+		templateEngine.process(path, ctx, response.getWriter());
+        
     }
 
     public void destroy() {

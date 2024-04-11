@@ -19,14 +19,15 @@ public class albumDAO {
 
     public List<Album> findAlbumsByUser(String username) throws SQLException {
         List<Album> albums = new ArrayList<>();
-        String query = "SELECT id, title FROM albums WHERE username = ?";
+        String query = "SELECT id, title, username FROM albums WHERE username = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setInt(1, username);
+            pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
                     Album album = new Album();
                     album.setUser_id(result.getInt("id"));
                     album.setTitle(result.getString("title"));
+                    album.setUsername(username);
                     albums.add(album);
                 }
             }

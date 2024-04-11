@@ -1,29 +1,28 @@
 package it.polimi.ProgettoTIW.model;
 
+import it.polimi.ProgettoTIW.DAO.albumDAO;
+import it.polimi.ProgettoTIW.beans.album;
+import it.polimi.tiw.missions.beans.User;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import it.polimi.ProgettoTIW.beans.album;
-import it.polimi.tiw.missions.beans.User;
-import it.polimi.tiw.missions.dao.AlbumDAO;
-import it.polimi.tiw.missions.utils.ConnectionHandler;
 
 @WebServlet("/CreateAlbum")
-public class CreateAlbumServlet extends HttpServlet {
+public class CreateAlbum extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
     
     
-    public CreateAlbumServlet()
+    public CreateAlbum()
     {
     	super();
     }

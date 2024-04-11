@@ -54,68 +54,64 @@ public class Registration extends HttpServlet {
         boolean testemail = true;
         boolean testusnunivocity = true;
         int testusnunivocity_count = 0;
-        
+
         LocalDateTime currentDateTime = LocalDateTime.now();
         user new_user = new user();
-        
+
         //check if pass and rep pass are equals
         testpwd = pwd1.equals(pwd2);
-        if(!testpwd)
-        {
-        	new_user.setEmail(email);
-        	new_user.setPassword(pwd1);
-        	new_user.setUsername(usrn);
-        	request.getSession().setAttribute("user", new_user);
-        	request.getSession().setAttribute("pwdError", "The pass aren't equals");
+        if (!testpwd) {
+            new_user.setEmail(email);
+            new_user.setPassword(pwd1);
+            new_user.setUsername(usrn);
+            request.getSession().setAttribute("user", new_user);
+            request.getSession().setAttribute("pwdError", "The pass aren't equals");
         }
-        
+
         testemail = CheckEmail(email);
         //check email syntax
-        if(!testemail)
-        {
-        	new_user.setEmail(email);
-        	new_user.setPassword(pwd1);
-        	new_user.setUsername(usrn);
-        	request.getSession().setAttribute("user", new_user);
-        	request.getSession().setAttribute("emailError", "The email syntax isnt right");
+        if (!testemail) {
+            new_user.setEmail(email);
+            new_user.setPassword(pwd1);
+            new_user.setUsername(usrn);
+            request.getSession().setAttribute("user", new_user);
+            request.getSession().setAttribute("emailError", "The email syntax isnt right");
         }
-        
+
         userDAO userDao = new userDAO(connection);
         try {
-        	testusnunivocity_count = userDao.checkUsrn(usrn);
-        	if(testusnunivocity_count > 0)
-        	{
-        		testusnunivocity = false;
-        		request.getSession().setAttribute("usnError", "The usn already exists");
-        	}
-        		
+            testusnunivocity_count = userDao.checkUsrn(usrn);
+            if (testusnunivocity_count > 0) {
+                testusnunivocity = false;
+                request.getSession().setAttribute("usnError", "The usn already exists");
+            }
+
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Internal server error, retry later");
             return;
         }
-        
-        if(testpwd && testemail && testusnunivocity)
-        {
-        try {
-        	new_user.setEmail(email);
-        	new_user.setPassword(pwd1);
-        	new_user.setUsername(usrn);
-        	new_user.setReg_Date(currentDateTime);
-            userDao.registerUser(new_user);
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println("Registration successful");
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Internal server error");
-        }	
-        
-        response.sendRedirect(getServletContext().getContextPath() + "/GoToHomePage");
+
+        if (testpwd && testemail && testusnunivocity) {
+            try {
+                new_user.setEmail(email);
+                new_user.setPassword(pwd1);
+                new_user.setUsername(usrn);
+                new_user.setReg_Date(currentDateTime);
+                userDao.registerUser(new_user);
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().println("Registration successful");
+            } catch (SQLException e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("Internal server error");
+            }
+
+            response.sendRedirect(getServletContext().getContextPath() + "/GoToHomePage");
+        } else {
+            response.sendRedirect(getServletContext().getContextPath() + "/Registration.html");
         }
-    	else
-    	{
-    		response.sendRedirect(getServletContext().getContextPath() + "/Registration.html");
-    	}
+
+    }
     
 
     public void destroy() {
