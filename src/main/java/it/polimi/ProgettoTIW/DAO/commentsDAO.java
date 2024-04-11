@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import it.polimi.ProgettoTIW.beans.comments;
+import it.polimi.ProgettoTIW.beans.Comment;
 
 public class commentsDAO {
     private final Connection con;
@@ -15,14 +15,14 @@ public class commentsDAO {
         this.con = connection;
     }
 
-    public List<comments> findCommentsByImage(int imageId) throws SQLException {
-        List<comments> comments = new ArrayList<>();
+    public List<Comment> findCommentsByImage(int imageId) throws SQLException {
+        List<Comment> comments = new ArrayList<>();
         String query = "SELECT id, text, userId FROM comments WHERE imageId = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, imageId);
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
-                    comments comment = new comments();
+                    Comment comment = new Comment();
                     comment.setUser_id(result.getInt("id"));
                     comment.set(result.getString("text"));
                     comment.setUserId(result.getInt("userId"));

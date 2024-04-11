@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import it.polimi.ProgettoTIW.beans.image;
+import it.polimi.ProgettoTIW.beans.Image;
 
-public class ImageDAO {
+public class imageDAO {
     private final Connection con;
 
-    public ImageDAO(Connection connection) {
+    public imageDAO(Connection connection) {
         this.con = connection;
     }
 

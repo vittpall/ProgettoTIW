@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polimi.ProgettoTIW.beans.Album;
 import it.polimi.ProgettoTIW.beans.album;
 
 public class albumDAO {
@@ -17,13 +18,13 @@ public class albumDAO {
     }
 
     public List<Album> findAlbumsByUser(String username) throws SQLException {
-        List<album> albums = new ArrayList<>();
+        List<Album> albums = new ArrayList<>();
         String query = "SELECT id, title FROM albums WHERE username = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
-                    album album = new album();
+                    Album album = new Album();
                     album.setUser_id(result.getInt("id"));
                     album.setTitle(result.getString("title"));
                     albums.add(album);

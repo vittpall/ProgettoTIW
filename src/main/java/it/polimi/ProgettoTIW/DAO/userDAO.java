@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.ProgettoTIW.beans.user;
+import it.polimi.ProgettoTIW.beans.User;
 
 public class userDAO {
     private final Connection con;
@@ -16,7 +16,7 @@ public class userDAO {
         this.con = connection;
     }
 
-    public user checkCredentials(String username, String password) throws SQLException {
+    public User checkCredentials(String username, String password) throws SQLException {
         String query = "SELECT id, username FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
@@ -26,7 +26,7 @@ public class userDAO {
                     return null;
                 else {
                     result.next();
-                    user user = new user();
+                    User user = new User();
                     user.setUser_id(result.getInt("id"));
                     user.setUsername(result.getString("username"));
                     return user;
@@ -44,7 +44,7 @@ public class userDAO {
                     return null;
                 else {
                     result.next();
-                    user user = new user();
+                    User user = new User();
                     user.setUsername(result.getString("username"));
                     return user;
                 }
@@ -79,13 +79,13 @@ public class userDAO {
         }
     }
     
-    public List<user> getAllUsers() throws SQLException {
-        List<user> users = new ArrayList<>();
+    public List<User> getAllUsers() throws SQLException {
+        List<User> users = new ArrayList<>();
         String query = "SELECT id, username, email FROM users";
         try (PreparedStatement pstatement = con.prepareStatement(query);
              ResultSet result = pstatement.executeQuery();) {
             while (result.next()) {
-                user user = new user();
+                User user = new User();
                 user.setId(result.getInt("id"));
                 user.setUsername(result.getString("username"));
                 user.setEmail(result.getString("email"));
