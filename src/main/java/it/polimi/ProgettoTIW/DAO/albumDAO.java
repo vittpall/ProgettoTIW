@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ProgettoTIW.beans.Album;
-import it.polimi.ProgettoTIW.beans.album;
+
 
 public class albumDAO {
     private final Connection con;
