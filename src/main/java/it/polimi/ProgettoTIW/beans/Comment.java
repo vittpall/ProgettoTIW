@@ -2,7 +2,7 @@ package it.polimi.ProgettoTIW.beans;
 
 import java.util.Date;
 
-public class comments {
+public class Comment {
     //primary key
     private Integer Image_id;
     private Integer User_id;

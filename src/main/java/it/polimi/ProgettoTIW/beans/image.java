@@ -2,7 +2,7 @@ package it.polimi.ProgettoTIW.beans;
 
 import java.util.Date;
 
-public class image {
+public class Image {
     //primary key
     private Integer Image_Id;
     private String Title;

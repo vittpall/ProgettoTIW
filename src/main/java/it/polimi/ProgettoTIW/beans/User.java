@@ -1,9 +1,8 @@
 package it.polimi.ProgettoTIW.beans;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-public class user {
+public class User {
     
     private String Username;
     private String Email;
