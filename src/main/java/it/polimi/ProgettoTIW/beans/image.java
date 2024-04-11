@@ -9,7 +9,7 @@ public class Image {
     private Date Creation_Date;
     private String Description;
     private String System_Path;
-
+    
     public Integer getImage_Id() {
         return Image_Id;
     }
