@@ -16,7 +16,7 @@ public class albumDAO {
         this.con = connection;
     }
 
-    public List<album> findAlbumsByUser(int username) throws SQLException {
+    public List<Album> findAlbumsByUser(String username) throws SQLException {
         List<album> albums = new ArrayList<>();
         String query = "SELECT id, title FROM albums WHERE username = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -32,7 +32,7 @@ public class albumDAO {
         }
         return albums;
     }
-
+    
     public void createAlbum(Album album) throws SQLException {
         String query = "INSERT INTO albums (title, userId) VALUES (?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {

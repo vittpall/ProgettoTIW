@@ -2,7 +2,7 @@ package it.polimi.ProgettoTIW.beans;
 
 import java.util.Date;
 
-public class album {
+public class Album {
     //primary key
     private Integer User_id;
     private String Title;

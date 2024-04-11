@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -66,10 +67,7 @@ public class GoToHomePage extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        user user = (user) request.getSession().getAttribute("user");
-    	List<List<album>> allalbums = new ArrayList<>();
-    	List<user> userlist = new ArrayList<>();
-    	List<album> useralbumlist = new ArrayList<>();
+        User user = (user) request.getSession().getAttribute("user");
         
         String loginpath = getServletContext().getContextPath() + "/index.html";
         
@@ -85,8 +83,8 @@ public class GoToHomePage extends HttpServlet {
         
         userDAO userDao = new userDAO(connection);
         try {
-            userlist = userDao.getAllUser(user.getUsername());
-            request.setAttribute("albums", albums);
+            userlist = userDao.getAllUser();
+            request.setAttribute("users", users);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Unable to retrieve albums");
@@ -94,18 +92,24 @@ public class GoToHomePage extends HttpServlet {
         }
 
         albumDAO albumDao = new albumDAO(connection);
-        List<album> albums;
+        List<Album> Users;
+        List<List<Album>> OtherAlbum;
         try {
-            albums = albumDao.findAlbumsByUser(user.getUsername());
-            request.setAttribute("albums", albums);
+            UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
+            OtherAlbum = albumDao.findAlbumOtherUser();
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Unable to retrieve albums");
             return;
         }
+        
+        for(User u : Users)
+        {
+        	if(u.getUsername().equals(user.getUsername()))
+        	OtherAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
+        }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-        dispatcher.forward(request, response);
+
     }
 
     public void destroy() {

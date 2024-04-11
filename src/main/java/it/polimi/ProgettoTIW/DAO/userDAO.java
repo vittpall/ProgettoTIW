@@ -81,7 +81,7 @@ public class userDAO {
     
     public List<user> getAllUsers() throws SQLException {
         List<user> users = new ArrayList<>();
-        String query = "SELECT id, username, name FROM users";
+        String query = "SELECT id, username, email FROM users";
         try (PreparedStatement pstatement = con.prepareStatement(query);
              ResultSet result = pstatement.executeQuery();) {
             while (result.next()) {
