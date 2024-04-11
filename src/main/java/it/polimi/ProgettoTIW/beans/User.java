@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class User {
     
+	private int Id;
     private String Username;
     private String Email;
     private String Password;
@@ -24,6 +25,11 @@ public class User {
     public String getPassword() {
         return Password;
     }
+    
+    public int getId()
+    {
+    	return Id;
+    }
 
     public void setEmail(String email) {
         Email = email;
@@ -39,5 +45,10 @@ public class User {
 
     public void setUsername(String username) {
         Username = username;
+    }
+    
+    public void setId(int id)
+    {
+    	this.Id = Id;
     }
 }

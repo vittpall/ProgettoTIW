@@ -24,6 +24,7 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.ProgettoTIW.beans.Album;
 import it.polimi.ProgettoTIW.beans.album;
 import it.polimi.ProgettoTIW.beans.user;
 import it.polimi.ProgettoTIW.DAO.albumDAO;
@@ -83,7 +84,7 @@ public class GoToHomePage extends HttpServlet {
         
         userDAO userDao = new userDAO(connection);
         try {
-            userlist = userDao.getAllUser();
+            UserList = userDao.getAllUsers();
             request.setAttribute("users", users);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -95,19 +96,19 @@ public class GoToHomePage extends HttpServlet {
         List<Album> Users;
         List<List<Album>> OtherAlbum;
         try {
-            UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
-            OtherAlbum = albumDao.findAlbumOtherUser();
+            List<Album> UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
+            for(User u : UserList)
+            {
+            	if(u.getUsername().equals(user.getUsername()))
+            	OtherAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
+            }
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Unable to retrieve albums");
             return;
         }
         
-        for(User u : Users)
-        {
-        	if(u.getUsername().equals(user.getUsername()))
-        	OtherAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
-        }
+
 
 
     }

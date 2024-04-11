@@ -27,8 +27,9 @@ public class userDAO {
                 else {
                     result.next();
                     User user = new User();
-                    user.setUser_id(result.getInt("id"));
+                    user.setId(result.getInt("id"));
                     user.setUsername(result.getString("username"));
+                    user.setPassword(result.getString("password"));
                     return user;
                 }
             }
@@ -36,23 +37,23 @@ public class userDAO {
     }
     
     public int checkUsrn(String username) throws SQLException {
-        String query = "SELECT COUNT(*) FROM users WHERE username = ?";
+        String query = "SELECT COUNT(*) as users_count FROM users WHERE username = ?";
+        int users_count = 0;
+        
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
                 if (!result.isBeforeFirst())
-                    return null;
+                    return -1;
                 else {
-                    result.next();
-                    User user = new User();
-                    user.setUsername(result.getString("username"));
-                    return user;
+                    users_count = result.getInt("users_count");
+                    return users_count;
                 }
             }
         }
     }
 
-    public void registerUser(user user) throws SQLException {
+    public void registerUser(User user) throws SQLException {
         String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, user.getUsername());
@@ -62,7 +63,7 @@ public class userDAO {
         }
     }
 
-    public void updateUser(user user) throws SQLException {
+    public void updateUser(User user) throws SQLException {
         String query = "UPDATE users SET name = ? WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, user.getName());

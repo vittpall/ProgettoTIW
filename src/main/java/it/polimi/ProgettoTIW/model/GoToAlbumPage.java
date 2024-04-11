@@ -1,26 +1,23 @@
 package it.polimi.ProgettoTIW.model;
 
-package it.polimi.tiw.missions.controllers;
+import it.polimi.ProgettoTIW.DAO.albumDAO;
+import it.polimi.ProgettoTIW.DAO.imageDAO;
+import it.polimi.ProgettoTIW.beans.Album;
+import it.polimi.ProgettoTIW.beans.Image;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import it.polimi.tiw.missions.beans.Album;
-import it.polimi.tiw.missions.beans.Image;
-import it.polimi.tiw.missions.dao.AlbumDAO;
-import it.polimi.tiw.missions.dao.ImageDAO;
-import it.polimi.tiw.missions.utils.ConnectionHandler;
 
 @WebServlet("/Album")
 public class GoToAlbumPage extends HttpServlet {
@@ -61,8 +58,8 @@ public class GoToAlbumPage extends HttpServlet {
             return;
         }
 
-        AlbumDAO albumDao = new AlbumDAO(connection);
-        ImageDAO imageDao = new ImageDAO(connection);
+        albumDAO albumDao = new albumDAO(connection);
+        imageDAO imageDao = new imageDAO(connection);
         Album album;
         List<Image> images;
 
