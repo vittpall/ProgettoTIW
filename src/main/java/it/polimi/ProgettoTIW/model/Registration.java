@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.polimi.ProgettoTIW.beans.user;
+import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.DAO.userDAO;
 
 
@@ -56,7 +56,7 @@ public class Registration extends HttpServlet {
         int testusnunivocity_count = 0;
 
         LocalDateTime currentDateTime = LocalDateTime.now();
-        user new_user = new user();
+        User new_user = new User();
 
         //check if pass and rep pass are equals
         testpwd = pwd1.equals(pwd2);

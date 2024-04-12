@@ -14,7 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.apache.*;
-import it.polimi.ProgettoTIW.beans.user;
+import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.DAO.userDAO;
 
 @WebServlet("/CheckLogin")
@@ -52,7 +52,7 @@ public class CheckLogin extends HttpServlet {
         }
 
         userDAO userDao = new userDAO(connection);
-        user user = null;
+        User user = null;
         try {
             user = userDao.checkCredentials(usrn, pwd);
         } catch (SQLException e) {

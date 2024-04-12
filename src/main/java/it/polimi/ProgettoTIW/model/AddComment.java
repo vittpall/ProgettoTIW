@@ -13,10 +13,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.apache.commons.lang.StringEscapeUtils;
-import it.polimi.tiw.missions.beans.Comment;
-import it.polimi.tiw.missions.beans.User;
-import it.polimi.tiw.missions.dao.CommentDAO;
-import it.polimi.tiw.missions.utils.ConnectionHandler;
+
+import it.polimi.ProgettoTIW.ConnectionHandler;
+import it.polimi.ProgettoTIW.beans.User;
+import it.polimi.ProgettoTIW.beans.Comment;
+import it.polimi.ProgettoTIW.DAO.userDAO;
+import it.polimi.ProgettoTIW.DAO.commentsDAO;
 
 @WebServlet("/AddComment")
 public class AddComment extends HttpServlet {
@@ -70,11 +72,11 @@ public class AddComment extends HttpServlet {
             return;
         }
 
-        CommentDAO commentDao = new CommentDAO(connection);
+        commentsDAO commentDao = new commentsDAO(connection);
         try {
             Comment comment = new Comment();
             comment.setText(commentText);
-            comment.setImageId(imageId);
+            comment.setImage_id(imageId);
             comment.setAuthorId(user.getId()); // Assuming Comment has an authorId field
             commentDao.addComment(comment);
 

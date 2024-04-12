@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import it.polimi.ProgettoTIW.beans.Image;
-import it.polimi.ProgettoTIW.beans.Album;
+import it.polimi.ProgettoTIW.beans.Album; // will be used stupid eclipse 
+
 public class imageDAO {
     private final Connection con;
 

@@ -1,8 +1,8 @@
 package it.polimi.ProgettoTIW.model;
 
 import it.polimi.ProgettoTIW.DAO.albumDAO;
-import it.polimi.ProgettoTIW.beans.album;
-import it.polimi.tiw.missions.beans.User;
+import it.polimi.ProgettoTIW.beans.Album;
+import it.polimi.ProgettoTIW.beans.User;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -62,7 +62,7 @@ public class CreateAlbum extends HttpServlet {
 
         albumDAO albumDao = new albumDAO(connection);
         try {
-            album album = new album();
+            Album album = new Album();
             album.setTitle(title);
             album.setCreatorId(user.getId());
             albumDao.createAlbum(album);

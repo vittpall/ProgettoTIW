@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.apache.commons.lang.StringEscapeUtils;
-import it.polimi.tiw.missions.beans.User;
-import it.polimi.tiw.missions.dao.CommentDAO;
-import it.polimi.tiw.missions.utils.ConnectionHandler;
+
+import it.polimi.ProgettoTIW.beans.User;
+import it.polimi.ProgettoTIW.DAO.commentsDAO;
+import it.polimi.ProgettoTIW.ConnectionHandler;
 
 @WebServlet("/ModifyComment")
 public class ModifyComment extends HttpServlet {
@@ -52,7 +53,7 @@ public class ModifyComment extends HttpServlet {
             return;
         }
 
-        CommentDAO commentDao = new CommentDAO(connection);
+        commentsDAO commentDao = new commentsDAO(connection);
         try {
             // Check if the current user is authorized to modify the comment
             int authorId = commentDao.getAuthorIdByCommentId(commentId);

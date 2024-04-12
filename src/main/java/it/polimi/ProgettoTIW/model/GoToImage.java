@@ -14,11 +14,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import it.polimi.tiw.missions.beans.Image;
-import it.polimi.tiw.missions.beans.Comment;
-import it.polimi.tiw.missions.dao.ImageDAO;
-import it.polimi.tiw.missions.dao.CommentDAO;
-import it.polimi.tiw.missions.utils.ConnectionHandler;
+
+import it.polimi.ProgettoTIW.beans.Image;
+import it.polimi.ProgettoTIW.beans.Comment;
+import it.polimi.ProgettoTIW.DAO.imageDAO;
+import it.polimi.ProgettoTIW.DAO.commentsDAO;
+import it.polimi.ProgettoTIW.ConnectionHandler;
 
 @WebServlet("/ImageDetails")
 public class GoToImage extends HttpServlet {
@@ -57,8 +58,8 @@ public class GoToImage extends HttpServlet {
             return;
         }
 
-        ImageDAO imageDao = new ImageDAO(connection);
-        CommentDAO commentDao = new CommentDAO(connection);
+        imageDAO imageDao = new imageDAO(connection);
+        commentsDAO commentDao = new commentsDAO(connection);
         Image image;
         List<Comment> comments;
 
