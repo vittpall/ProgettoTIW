@@ -39,7 +39,7 @@ public class albumDAO {
         String query = "INSERT INTO albums (title, userId) VALUES (?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, album.getTitle());
-            pstatement.setInt(2, album.getCreatorId());
+            pstatement.setInt(2, album.getUser_id());
             pstatement.executeUpdate();
         }
     }
@@ -48,7 +48,7 @@ public class albumDAO {
         String query = "UPDATE albums SET title = ? WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, album.getTitle());
-            pstatement.setInt(2, album.getId());
+            pstatement.setInt(2, album.getUser_id());
             pstatement.executeUpdate();
         }
     }

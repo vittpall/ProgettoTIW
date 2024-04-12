@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import it.polimi.ProgettoTIW.beans.Image;
-
+import it.polimi.ProgettoTIW.beans.Album;
 public class imageDAO {
     private final Connection con;
 
@@ -23,9 +23,9 @@ public class imageDAO {
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
                     Image image = new Image();
-                    image.setId(result.getInt("id"));
+                    image.setImage_Id(result.getInt("id"));
                     image.setTitle(result.getString("title"));
-                    image.setPath(result.getString("path"));
+                    image.setSystem_Path(result.getString("path"));
                     images.add(image);
                 }
             }
@@ -37,8 +37,9 @@ public class imageDAO {
         String query = "INSERT INTO images (title, path, albumId) VALUES (?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, image.getTitle());
-            pstatement.setString(2, image.getPath());
-            pstatement.setInt(3, image.getAlbumId());
+            pstatement.setString(2, image.getSystem_Path());
+           // right now album doesn't have an id
+          //  pstatement.setInt(3, image.getAlbumId());
             pstatement.executeUpdate();
         }
     }
@@ -47,8 +48,8 @@ public class imageDAO {
         String query = "UPDATE images SET title = ?, path = ? WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, image.getTitle());
-            pstatement.setString(2, image.getPath());
-            pstatement.setInt(3, image.getId());
+            pstatement.setString(2, image.getSystem_Path());
+            pstatement.setInt(3, image.getImage_Id());
             pstatement.executeUpdate();
         }
     }

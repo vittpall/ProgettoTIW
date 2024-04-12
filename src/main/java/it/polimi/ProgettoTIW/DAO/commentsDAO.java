@@ -24,8 +24,8 @@ public class commentsDAO {
                 while (result.next()) {
                     Comment comment = new Comment();
                     comment.setUser_id(result.getInt("id"));
-                    comment.set(result.getString("text"));
-                    comment.setUserId(result.getInt("userId"));
+                    comment.setText(result.getString("text"));
+                  //  comment.setUser_id(result.getInt("userId"));
                     comments.add(comment);
                 }
             }
@@ -37,8 +37,8 @@ public class commentsDAO {
         String query = "INSERT INTO comments (text, userId, imageId) VALUES (?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, comment.getText());
-            pstatement.setInt(2, comment.getUserId());
-            pstatement.setInt(3, comment.getImageId());
+            pstatement.setInt(2, comment.getUser_id());
+            pstatement.setInt(3, comment.getImage_id());
             pstatement.executeUpdate();
         }
     }

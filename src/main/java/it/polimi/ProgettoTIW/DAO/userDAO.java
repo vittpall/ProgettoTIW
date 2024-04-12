@@ -66,7 +66,7 @@ public class userDAO {
     public void updateUser(User user) throws SQLException {
         String query = "UPDATE users SET name = ? WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, user.getName());
+            pstatement.setString(1, user.getUsername());
             pstatement.setInt(2, user.getId());
             pstatement.executeUpdate();
         }
