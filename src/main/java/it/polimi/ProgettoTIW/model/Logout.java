@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/Logout")
@@ -17,8 +18,18 @@ public class Logout extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getSession().invalidate();
-        response.sendRedirect("login.html"); // Adjust the redirection page as needed
-    }
+			throws ServletException, IOException {
+
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		String path = getServletContext().getContextPath() + "/index.html";
+		response.sendRedirect(path);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
 }
