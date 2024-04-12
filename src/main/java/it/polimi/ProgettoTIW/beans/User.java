@@ -47,7 +47,7 @@ public class User {
         Username = username;
     }
     
-    public void setId(int id)
+    public void setId(int Id)
     {
     	this.Id = Id;
     }

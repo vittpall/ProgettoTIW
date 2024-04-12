@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Album {
     //primary key
-    //i added username because i use it to retrieve data from the list of album
+    //i added Username because i use it to retrieve data from the list of album
 	private String Username;
     private Integer User_id;
     private String Title;
