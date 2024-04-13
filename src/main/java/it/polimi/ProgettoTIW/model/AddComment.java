@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.apache.commons.lang.StringEscapeUtils;
+
 
 import it.polimi.ProgettoTIW.ConnectionHandler;
 import it.polimi.ProgettoTIW.beans.User;
@@ -49,7 +49,7 @@ public class AddComment extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String commentText = StringEscapeUtils.escapeJava(request.getParameter("comment"));
+        String commentText = request.getParameter("comment");
         int imageId;
         try {
             imageId = Integer.parseInt(request.getParameter("imageId"));

@@ -46,7 +46,7 @@ public class CreateAlbum extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String title = StringEscapeUtils.escapeJava(request.getParameter("title"));
+        String title = request.getParameter("title");
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

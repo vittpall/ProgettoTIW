@@ -1,4 +1,4 @@
-package it.polimi.tiw.missions.controllers;
+package it.polimi.ProgettoTIW.model;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.apache.commons.lang.StringEscapeUtils;
+
 
 import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.DAO.commentsDAO;
@@ -46,7 +46,7 @@ public class ModifyComment extends HttpServlet {
             return;
         }
 
-        String newText = StringEscapeUtils.escapeJava(request.getParameter("newText"));
+        String newText = request.getParameter("newText");
         if (newText == null || newText.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().println("Comment text cannot be empty");
