@@ -105,7 +105,9 @@ public class GoToHomePage extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Unable to retrieve albums");
             return;
-        }
+        }	
+        
+        //TODO add the images to the select form 
         
 		String path = getServletContext().getContextPath() + "/Home.html";
 		ServletContext servletContext = getServletContext();

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.Album; // will be used stupid eclipse 
@@ -35,12 +36,12 @@ public class imageDAO {
     }
 
     public void addImage(Image image) throws SQLException {
-        String query = "INSERT INTO images (title, path, albumId) VALUES (?, ?, ?)";
+        String query = "INSERT INTO images (title, description, systemPath, creationDate) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, image.getTitle());
-            pstatement.setString(2, image.getSystem_Path());
-           // right now album doesn't have an id
-          //  pstatement.setInt(3, image.getAlbumId());
+            pstatement.setString(2, image.getDescription());
+            pstatement.setString(3, image.getSystem_Path()); 
+            pstatement.setDate(4, (java.sql.Date)image.getCreation_Date());
             pstatement.executeUpdate();
         }
     }
@@ -62,4 +63,20 @@ public class imageDAO {
             pstatement.executeUpdate();
         }
     }
+
+	public int RetrieveNextImageId() throws SQLException {
+		int images_id = 0;
+		String query = "SELECT id FROM images ORDER BY decr LIMIT 1";
+		try (PreparedStatement pstatement = con.prepareStatement(query);)
+		{
+			try(ResultSet result = pstatement.executeQuery())
+			{
+				while(result.next())
+				{
+					images_id = result.getInt("id");
+				}
+			}
+		}
+		return images_id+1;
+	}
 }

@@ -7,7 +7,6 @@
 <body>
     <h1>User Albums</h1>
     
-    <!-- Colonna con gli album dell'utente -->
     <div>
         <h2>Your Albums</h2>
         <ul>
@@ -17,7 +16,7 @@
         </ul>
     </div>
     
-    <!-- Colonna con gli album degli altri utenti -->
+    
     <div th:each="otherUserAlbumList : ${OtherUserAlbum}">
         <h2 th:text="${otherUserAlbumList.username}'s Albums"></h2>
         <ul>
@@ -27,26 +26,24 @@
         </ul>
     </div>
     
-    <!-- Form per le immagini dell'utente -->
     <div>
-        <h2>Your Images</h2>
-        <form th:action="@{/AlbumCreation}" method="post">
-            <input type="hidden" th:each="image : ${ImageUser}" th:name="'images[' + ${image.id} + ']'" th:value="${image.url}">
-            <input type="submit" value="Create Album">
-        </form>
-    </div>
-    
-    <div>
-        <h2>Images</h2>
+        <h2>Album Creation form</h2>
         <form th:action="@{/CreateAlbum}" method="post" enctype="multipart/form-data">
             <input name="title" type="text" required>
             
-              <select name="selectedImage">
-                <option value="">Select an Image</option>
-                <option th:each="image : ${ImageUser}" th:value="${image.id}" th:text="${image.name}"></option>
-              </select>
+             <select name="selectedImage">
+               <option value="">Select an Image</option>
+               <option th:each="image : ${ImageUser}" th:value="${image.id}" th:text="${image.name}"></option>
+             </select>
+            
+            
+            <input type="text" name="image_title">
+            <input type="text" name="description">
             <!-- File input for uploading new image -->
             <input type="file" name="file">
+            
+            
+            
             
             <!-- Submit button for both actions -->
             <input type="submit" name="action" value="CreateAlbum">

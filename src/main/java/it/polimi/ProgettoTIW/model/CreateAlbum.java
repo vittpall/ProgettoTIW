@@ -1,6 +1,7 @@
 package it.polimi.ProgettoTIW.model;
 
 import it.polimi.ProgettoTIW.DAO.albumDAO;
+import it.polimi.ProgettoTIW.DAO.imageDAO;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.nio.file.Paths;
 
 
 import it.polimi.ProgettoTIW.beans.Album;
+import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.User;
 
 import javax.servlet.ServletContext;
@@ -61,10 +63,19 @@ public class CreateAlbum extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+    	int last_id = 0;
+    	
         User user = (User) request.getSession().getAttribute("user");
         
         String title = request.getParameter("title");
          
+        String description = request.getParameter("description");
+        String uploaded_image_title = request.getParameter("uploaded_image_title");
+        
+		imageDAO imageDao = new imageDAO(connection);
+        albumDAO albumDao = new albumDAO(connection);
+        
+        
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().println("User not logged in");
@@ -78,7 +89,7 @@ public class CreateAlbum extends HttpServlet {
         }
         
         //create a new album adding only the title
-        albumDAO albumDao = new albumDAO(connection);
+
         try {
             Album album = new Album();
             album.setTitle(title);
@@ -110,7 +121,7 @@ public class CreateAlbum extends HttpServlet {
         	e.printStackTrace();
         }
         
-        
+        //TODO: another way to implement the view was to create a dedicated page for adding and uploading images to the previously created album. Every time a photo is uploaded the form used to select photos.
         
         if (images_id.length == 0 || images_id == null)
         	System.out.println("no images selected");
@@ -147,7 +158,23 @@ public class CreateAlbum extends HttpServlet {
 			String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 			System.out.println("Filename: " + fileName);
 			
-			String outputPath = folderPath + fileName;
+			//TODO deal with possible duplicates in the same. I retrieve the last image_id avaiable in the images db
+			
+
+			
+			try
+			{
+				last_id = imageDao.RetrieveNextImageId();
+			}
+			catch (SQLException e)
+			{
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("An error occurs while retriving the last image id");
+			}
+			
+			
+			
+			String outputPath = folderPath + fileName + last_id;
 			System.out.println("Output path: " + outputPath);
 
 			File file = new File(outputPath);
@@ -166,11 +193,28 @@ public class CreateAlbum extends HttpServlet {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while saving file");
 			}
 			
-			//TODO add the image through the imageDAO to the DB
+			
+			Image ImageToAdd = new Image();
+			ImageToAdd.setCreation_Date(new Date());
+			ImageToAdd.setDescription(description);
+			ImageToAdd.setSystem_Path(outputPath);
+			ImageToAdd.setTitle(title);
+			//i dont pass image id because it's meant to be auto inserted
+			
+			try
+			{
+				imageDao.addImage(ImageToAdd);
+				albumDao.AddImagesToAlbum(last_id, user.getId(), title);
+			}
+			catch (SQLException e)
+			{
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("An error occurs while adding to the db the uploaded image");
+			}
+			
 			
 		}
-		
-		//TODO add a for that adds for every images inside the select for an entry within the relationship table between images and albums
+
 		
 		
 
