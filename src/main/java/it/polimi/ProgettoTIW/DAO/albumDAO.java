@@ -1,6 +1,7 @@
 package it.polimi.ProgettoTIW.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,12 +37,25 @@ public class albumDAO {
     }
     
     public void createAlbum(Album album) throws SQLException {
-        String query = "INSERT INTO albums (title, userId) VALUES (?, ?)";
+        String query = "INSERT INTO albums (title, userId, creationDate) VALUES (?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, album.getTitle());
             pstatement.setInt(2, album.getUser_id());
+            pstatement.setDate(3, (Date) album.getCreation_Date());
             pstatement.executeUpdate();
         }
+    }
+    
+    //contain_images n-n
+    public void AddImagesToAlbum (int images_id, int User_id, String title) throws SQLException
+    {
+    	String query = "INSERT INTO Contains_Images (userId, title, imageId) VALUES (?,?,?)";
+    	try(PreparedStatement pstatement = con.prepareStatement(query);)
+    	{
+    		pstatement.setInt(1, images_id);
+    		pstatement.setString(2, title);
+    		pstatement.setInt(3, User_id);
+    	}
     }
 
     public void updateAlbum(Album album) throws SQLException {
@@ -60,4 +74,5 @@ public class albumDAO {
             pstatement.executeUpdate();
         }
     }
+    
 }

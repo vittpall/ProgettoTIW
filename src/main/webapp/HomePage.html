@@ -44,7 +44,7 @@
               <select name="selectedImage">
                 <option value="">Select an Image</option>
                 <option th:each="image : ${ImageUser}" th:value="${image.id}" th:text="${image.name}"></option>
-            </select>
+              </select>
             <!-- File input for uploading new image -->
             <input type="file" name="file">
             
