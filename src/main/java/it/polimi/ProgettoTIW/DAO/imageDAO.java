@@ -18,17 +18,20 @@ public class imageDAO {
         this.con = connection;
     }
 
-    public List<Image> findImagesByAlbum(int albumId) throws SQLException {
+    public List<Image> findImagesByAlbum(String albumTitle, int Offset) throws SQLException {
         List<Image> images = new ArrayList<>();
-        String query = "SELECT id, title, path FROM images WHERE albumId = ?";
+        String query = "SELECT id, title, path, creation_date, description FROM images as i, contains_images as c WHERE i.id = c.imagesId AND c.albumTitle = ? LIMIT 6 OFFSET ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setInt(1, albumId);
+            pstatement.setString(1, albumTitle);
+            pstatement.setInt(2, Offset);
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
                     Image image = new Image();
                     image.setImage_Id(result.getInt("id"));
                     image.setTitle(result.getString("title"));
                     image.setSystem_Path(result.getString("path"));
+                    image.setCreation_Date(result.getDate("creation_date"));          
+                    image.setDescription(result.getString("description"));
                     images.add(image);
                 }
             }
