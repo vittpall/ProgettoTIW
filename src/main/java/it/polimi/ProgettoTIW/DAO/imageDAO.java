@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.User;
-import it.polimi.ProgettoTIW.beans.Album; // will be used stupid eclipse 
+
 
 public class imageDAO {
     private final Connection con;
@@ -83,6 +83,25 @@ public class imageDAO {
 		}
 		return images_id+1;
 	}
+	
+	public Image findImageById(int imageId) throws SQLException {
+        String query = "SELECT id, title, path, creation_date, description FROM images WHERE id = ?";
+        Image image = null;
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
+            pstatement.setInt(1, imageId);
+            try (ResultSet result = pstatement.executeQuery()) {
+                if (result.next()) {
+                    image = new Image();
+                    image.setImage_Id(result.getInt("id"));
+                    image.setTitle(result.getString("title"));
+                    image.setSystem_Path(result.getString("path"));
+                    image.setCreation_Date(result.getDate("creation_date"));
+                    image.setDescription(result.getString("description"));
+                }
+            }
+        }
+        return image;
+    }
 	
 	public List<Image> RetrieveAllImagesByUser(User user) throws SQLException
 	{

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+    <title>Image Details</title>
+    <!-- Link to CSS files -->
+    
+</head>
+<body>
+    <div th:if="${image != null}">
+        <img th:src="@{${image.systemPath}}" th:alt="${image.title}" />
+        <h2 th:text="${image.title}">Image Title</h2>
+        <p th:text="${image.description}">Description</p>
+        <div>
+            <h3>Comments</h3>
+            <div th:each="comment : ${comments}">
+                <p th:text="${comment.authorName + ': ' + comment.text}">Comment</p>
+            </div>
+        </div>
+    </div>
+    <div th:if="${image == null}">
+        <p>No image details available.</p>
+    </div>
+</body>
+</html>
+

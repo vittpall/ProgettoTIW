@@ -1,11 +1,11 @@
 package it.polimi.ProgettoTIW.model;
 
-import it.polimi.ProgettoTIW.DAO.albumDAO;
+
 import it.polimi.ProgettoTIW.DAO.imageDAO;
-import it.polimi.ProgettoTIW.beans.Album;
+
 import it.polimi.ProgettoTIW.beans.Image;
 
-import javax.servlet.RequestDispatcher;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
