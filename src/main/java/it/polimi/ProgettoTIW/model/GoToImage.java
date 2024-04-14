@@ -19,7 +19,7 @@ import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.Comment;
 import it.polimi.ProgettoTIW.DAO.imageDAO;
 import it.polimi.ProgettoTIW.DAO.commentsDAO;
-import it.polimi.ProgettoTIW.ConnectionHandler;
+
 
 @WebServlet("/ImageDetails")
 public class GoToImage extends HttpServlet {
@@ -87,9 +87,11 @@ public class GoToImage extends HttpServlet {
 
     public void destroy() {
         try {
-            ConnectionHandler.closeConnection(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
+        	if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException sqle) {
+            
         }
     }
 }

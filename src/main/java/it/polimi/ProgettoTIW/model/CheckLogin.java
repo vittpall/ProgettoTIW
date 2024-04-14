@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.apache.*;
+
 import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.DAO.userDAO;
 
@@ -43,7 +43,7 @@ public class CheckLogin extends HttpServlet {
             throws ServletException, IOException {
         String usrn = request.getParameter("username");
         String pwd = request.getParameter("password");
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(); 
 
         if (usrn == null || pwd == null || usrn.isEmpty() || pwd.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -65,12 +65,12 @@ public class CheckLogin extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().println("User not registered. Create a new one");
         } else {
-            request.getSession().setAttribute("user", user);
+            session.setAttribute("user", user);
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().println(usrn);
-            request.getSession().setAttribute("user", user);
+            session.setAttribute("user", user);
             response.sendRedirect(request.getServletContext().getContextPath()+"/GoToHomePage");
         }
     }

@@ -14,10 +14,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-import it.polimi.ProgettoTIW.ConnectionHandler;
+
 import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.beans.Comment;
-import it.polimi.ProgettoTIW.DAO.userDAO;
+
 import it.polimi.ProgettoTIW.DAO.commentsDAO;
 
 @WebServlet("/AddComment")
@@ -77,7 +77,7 @@ public class AddComment extends HttpServlet {
             Comment comment = new Comment();
             comment.setText(commentText);
             comment.setImage_id(imageId);
-            comment.setAuthorId(user.getId()); // Assuming Comment has an authorId field
+            comment.setUser_id(user.getId()); // Assuming Comment has an authorId field
             commentDao.addComment(comment);
 
             response.setStatus(HttpServletResponse.SC_OK);
@@ -90,9 +90,11 @@ public class AddComment extends HttpServlet {
 
     public void destroy() {
         try {
-            ConnectionHandler.closeConnection(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
+        	if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException sqle) {
+            
         }
     }
 }

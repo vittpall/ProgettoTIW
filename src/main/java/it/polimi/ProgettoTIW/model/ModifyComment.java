@@ -4,15 +4,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
+
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
 import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.DAO.commentsDAO;
-import it.polimi.ProgettoTIW.ConnectionHandler;
+
 
 @WebServlet("/ModifyComment")
 public class ModifyComment extends HttpServlet {
@@ -25,7 +29,20 @@ public class ModifyComment extends HttpServlet {
     }
 
     public void init() throws ServletException {
-        connection = ConnectionHandler.getConnection(getServletContext());
+        try {
+            ServletContext context = getServletContext();
+            String driver = context.getInitParameter("dbDriver");
+            String url = context.getInitParameter("dbUrl");
+            String user = context.getInitParameter("dbUser");
+            String password = context.getInitParameter("dbPassword");
+            Class.forName(driver);
+            connection = DriverManager.getConnection(url, user, password);
+
+        } catch (ClassNotFoundException e) {
+            throw new UnavailableException("Can't load database driver");
+        } catch (SQLException e) {
+            throw new UnavailableException("Couldn't get db connection");
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -80,9 +97,11 @@ public class ModifyComment extends HttpServlet {
 
     public void destroy() {
         try {
-            ConnectionHandler.closeConnection(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
+        	if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException sqle) {
+            
         }
     }
 }
