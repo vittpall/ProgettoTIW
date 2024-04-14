@@ -124,12 +124,7 @@ public class GoToAlbumPage extends HttpServlet {
 		ctx.setVariable("AvailablePrev", AvailablePrev);
 		ctx.setVariable("ImagesToShow", images);
 		templateEngine.process(path, ctx, response.getWriter());
-        
-        
-        
-        
-        
-        
+            
     }
 
     public void destroy() {
