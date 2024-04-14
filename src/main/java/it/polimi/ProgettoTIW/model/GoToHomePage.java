@@ -2,6 +2,7 @@ package it.polimi.ProgettoTIW.model;
 
 import javax.servlet.annotation.WebServlet;
 
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,8 +24,10 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.ProgettoTIW.beans.Album;
+import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.DAO.albumDAO;
+import it.polimi.ProgettoTIW.DAO.imageDAO;
 import it.polimi.ProgettoTIW.DAO.userDAO;
 
 @WebServlet("/GoToHomePage")
@@ -90,10 +93,14 @@ public class GoToHomePage extends HttpServlet {
             return;
         }
 
+        imageDAO imageDao = new imageDAO(connection);
         albumDAO albumDao = new albumDAO(connection);
+        List<Image> imagesUser = new ArrayList<>();
         List<Album> UserAlbum;
         List<List<Album>> OtherUserAlbum = new ArrayList<>();
         try {
+        	
+        	imagesUser = imageDao.RetrieveAllImagesByUser(user);
             UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
             for(User u : UserList)
             {
@@ -107,11 +114,11 @@ public class GoToHomePage extends HttpServlet {
             return;
         }	
         
-        //TODO add the images to the select form 
         
 		String path = getServletContext().getContextPath() + "/Home.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		ctx.setVariable("ImagesUser", imagesUser);
 		ctx.setVariable("UserAlbum", UserAlbum);
 		ctx.setVariable("OtherUserAlbum", OtherUserAlbum);
 		templateEngine.process(path, ctx, response.getWriter());

@@ -29,22 +29,20 @@
     <div>
         <h2>Album Creation form</h2>
         <form th:action="@{/CreateAlbum}" method="post" enctype="multipart/form-data">
+            
             <input name="title" type="text" required>
             
-             <select name="selectedImage">
+            <select name="selectedImage">
                <option value="">Select an Image</option>
-               <option th:each="image : ${ImageUser}" th:value="${image.id}" th:text="${image.name}"></option>
-             </select>
+               <option th:each="image : ${ImagesUser}" th:value="${image.id}" th:text="${image.title}"></option>
+            </select>
             
             
             <input type="text" name="image_title">
             <input type="text" name="description">
             <!-- File input for uploading new image -->
             <input type="file" name="file">
-            
-            
-            
-            
+        
             <!-- Submit button for both actions -->
             <input type="submit" name="action" value="CreateAlbum">
         </form>

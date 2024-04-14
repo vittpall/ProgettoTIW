@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import it.polimi.ProgettoTIW.beans.Image;
+import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.beans.Album; // will be used stupid eclipse 
 
 public class imageDAO {
@@ -78,5 +79,26 @@ public class imageDAO {
 			}
 		}
 		return images_id+1;
+	}
+	
+	public List<Image> RetrieveAllImagesByUser(User user) throws SQLException
+	{
+        List<Image> images = new ArrayList<>();
+        String query = "SELECT id, title, path, creationDate, description FROM images as i, contains_images as c WHERE i.id = c.imageId AND c.userId = ?";
+        try (PreparedStatement pstatement = con.prepareStatement(query);) {
+            pstatement.setInt(1, user.getId());
+            try (ResultSet result = pstatement.executeQuery();) {
+                while (result.next()) {
+                    Image image = new Image();
+                    image.setImage_Id(result.getInt("id"));
+                    image.setTitle(result.getString("title"));
+                    image.setSystem_Path(result.getString("path"));
+                    image.setCreation_Date(new Date());
+                    image.setDescription(result.getString("description"));
+                    images.add(image);
+                }
+            }
+        }
+        return images;
 	}
 }

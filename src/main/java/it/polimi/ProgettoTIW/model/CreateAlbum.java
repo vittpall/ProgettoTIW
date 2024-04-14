@@ -117,14 +117,14 @@ public class CreateAlbum extends HttpServlet {
         }
         catch (NumberFormatException e)
         {
-        	System.err.println("an error occurs while parsing the array");
+        	System.err.println("An error occurs while parsing the array");
         	e.printStackTrace();
         }
         
         //TODO: another way to implement the view was to create a dedicated page for adding and uploading images to the previously created album. Every time a photo is uploaded the form used to select photos.
         
         if (images_id.length == 0 || images_id == null)
-        	System.out.println("no images selected");
+        	System.out.println("No images selected");
         else
         {
         	try {
@@ -198,8 +198,8 @@ public class CreateAlbum extends HttpServlet {
 			ImageToAdd.setCreation_Date(new Date());
 			ImageToAdd.setDescription(description);
 			ImageToAdd.setSystem_Path(outputPath);
-			ImageToAdd.setTitle(title);
-			//i dont pass image id because it's meant to be auto inserted
+			ImageToAdd.setTitle(uploaded_image_title);
+			//i dont pass the image id because it's meant to be auto-inserted
 			
 			try
 			{
@@ -216,8 +216,6 @@ public class CreateAlbum extends HttpServlet {
 		}
 
 		
-		
-
 
     }
 
