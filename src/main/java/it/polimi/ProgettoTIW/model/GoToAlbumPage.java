@@ -13,6 +13,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,8 +27,11 @@ import java.util.List;
 
 @WebServlet("/Album")
 public class GoToAlbumPage extends HttpServlet {
+	
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
+	private TemplateEngine templateEngine;
+	int Offset = 0;
     
     
     public GoToAlbumPage()
@@ -32,14 +41,20 @@ public class GoToAlbumPage extends HttpServlet {
 
     public void init() throws ServletException {
         try {
-            ServletContext context = getServletContext();
-            String driver = context.getInitParameter("dbDriver");
-            String url = context.getInitParameter("dbUrl");
-            String user = context.getInitParameter("dbUser");
-            String password = context.getInitParameter("dbPassword");
-            Class.forName(driver);
-            connection = DriverManager.getConnection(url, user, password);
-
+        	
+    		ServletContext servletContext = getServletContext();
+    		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+    		templateResolver.setTemplateMode(TemplateMode.HTML);
+    		this.templateEngine = new TemplateEngine();
+    		this.templateEngine.setTemplateResolver(templateResolver);
+    		templateResolver.setSuffix(".html");
+    		String driver = servletContext.getInitParameter("dbDriver");
+    		String url = servletContext.getInitParameter("dbUrl");
+    		String user = servletContext.getInitParameter("dbUser");
+    		String password = servletContext.getInitParameter("dbPassword");
+    		Class.forName(driver);
+    		connection = DriverManager.getConnection(url, user, password);
+    		
         } catch (ClassNotFoundException e) {
             throw new UnavailableException("Can't load database driver");
         } catch (SQLException e) {
@@ -49,41 +64,72 @@ public class GoToAlbumPage extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int albumId;
-        try {
-            albumId = Integer.parseInt(request.getParameter("id"));
-        } catch (NumberFormatException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("Invalid album ID format");
-            return;
-        }
 
-        albumDAO albumDao = new albumDAO(connection);
+    	String AlbumTitle = request.getParameter("albumTitle");
+    	String NextPage = request.getParameter("Next");
+    	String PrevPage = request.getParameter("Prev");
+    	boolean AvailableNext = false;
+    	boolean AvailablePrev = false;
+    	
+    	
+    	if(NextPage != null)
+    	{
+    		this.Offset += 5;
+    	}
+    	else
+    	{
+    		if(PrevPage != null)
+    		{
+    			this.Offset -= 5;
+    		}
+    	}
+
         imageDAO imageDao = new imageDAO(connection);
-        Album album;
         List<Image> images;
 
         try {
-
-            album = albumDao.findAlbumById(albumId);
-            if (album == null) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().println("Album not found");
-                return;
-            }
-
-            images = imageDao.findImagesByAlbum(albumId);
+        	
+            images = imageDao.findImagesByAlbum(AlbumTitle, Offset);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Internal server error while retrieving album data");
             return;
         }
 
-        request.setAttribute("album", album);
-        request.setAttribute("images", images);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("albumView.jsp"); // Replace with actual view page
-        dispatcher.forward(request, response);
+        //implements the logic used to add the button prev or next
+        if(Offset == 0)
+        {
+        	AvailablePrev = false;
+        	if(images.size() > 5)
+        		AvailableNext = true;
+        	else
+        		AvailableNext = false;
+        }
+        else
+        {
+        	if(Offset > 0)
+        	{
+              	AvailablePrev = true;
+            	if(images.size() > 5)
+            		AvailableNext = true;
+            	else
+            		AvailableNext = false;
+        	}
+        }
+        
+		String path = getServletContext().getContextPath() + "/AlbumPage.html";
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		ctx.setVariable("AvailableNext", AvailableNext);
+		ctx.setVariable("AvailablePrev", AvailablePrev);
+		ctx.setVariable("ImagesToShow", images);
+		templateEngine.process(path, ctx, response.getWriter());
+        
+        
+        
+        
+        
+        
     }
 
     public void destroy() {
