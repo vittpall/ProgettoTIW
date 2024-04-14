@@ -7,7 +7,6 @@ public class Comment {
     private Integer Image_id;
     private Integer Id;
     private Date Publication_date;
-    
     private String Text;
     
     public void setText(String Text)

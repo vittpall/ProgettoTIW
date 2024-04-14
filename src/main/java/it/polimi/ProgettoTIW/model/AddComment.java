@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
-
+import java.util.Date;
 
 import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.beans.Comment;
 
 import it.polimi.ProgettoTIW.DAO.commentsDAO;
+import it.polimi.ProgettoTIW.DAO.imageDAO;
 
 @WebServlet("/AddComment")
 public class AddComment extends HttpServlet {
@@ -77,9 +77,10 @@ public class AddComment extends HttpServlet {
             Comment comment = new Comment();
             comment.setText(commentText);
             comment.setImage_id(imageId);
-            comment.setUser_id(user.getId()); // Assuming Comment has an authorId field
+            comment.setUser_id(user.getId());
+            comment.setPublication_date(new Date());
             commentDao.addComment(comment);
-
+            
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().println("Comment added successfully");
         } catch (SQLException e) {
@@ -87,7 +88,64 @@ public class AddComment extends HttpServlet {
             response.getWriter().println("Error while adding comment");
         }
     }
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    	//consider that i cannot retriever userId from the image id
+    	imageDAO imageDao = new imageDAO(connection);
+    	commentsDAO commentsDao = new commentsDAO(connection);
+    	int imageCreator = 0;
+    	
+        int imageId;
+        try {
+            imageId = Integer.parseInt(request.getParameter("imageId"));
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println("Invalid image ID format");
+            return;
+        }
+        
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("User not logged in");
+            return;
+        }
+        
+    	try {
+			imageCreator = imageDao.CheckCreator(imageId);
+		} catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Error while removing comment");
+		}
+    	
+    	if(user.getId() != imageCreator)
+    	{
+    		System.out.println("users not authorized to delete the image");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("User not logged in");
+            return;
+    	}
+    	else
+    	{
+            try {
+            	
+            	commentsDao.deleteComment(imageId);
+            	imageDao.deleteImage(imageId);
+                
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().println("Comment deleted successfully");
+            } catch (SQLException e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("Error while deleting comment");
+            }
+    	}
+    	
+    	
+    }
 
+    
+    
     public void destroy() {
         try {
         	if (connection != null) {

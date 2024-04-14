@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -16,10 +16,10 @@
     </div>
 	
 	<div th:if="${AvailableNext}">
-		<a th:href="@[/GoToAlbumPage(Next=true)]">Next</a>
+		<a th:href="@{/GoToAlbumPage(Next=true)}">Next</a>
 	</div>
 	<div th:if="${AvailablePrev}">
-		<a th:href="@[/GoToAlbumPage(Prev=true)]">Next</a>
+		<a th:href="@{/GoToAlbumPage(Prev=true)}">Prev</a>
 	</div>
 	
 

@@ -103,6 +103,24 @@ public class imageDAO {
         return image;
     }
 	
+	public int CheckCreator(int imageId) throws SQLException
+	{
+		String query = "SELECT UserId FROM Contain_image as C, Images as I WHERE C.imageId = I.imageID";
+		int user_id = 0;
+		try(PreparedStatement pstatement = con.prepareStatement(query))
+		{
+			try(ResultSet result = pstatement.executeQuery())
+			{
+				if(result.next())
+				{
+					user_id = result.getInt("userId");
+				}
+			}
+		}
+		return user_id;
+				
+	}
+	
 	public List<Image> RetrieveAllImagesByUser(User user) throws SQLException
 	{
         List<Image> images = new ArrayList<>();

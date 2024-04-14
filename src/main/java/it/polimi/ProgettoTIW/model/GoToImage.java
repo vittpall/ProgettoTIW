@@ -3,6 +3,7 @@ package it.polimi.ProgettoTIW.model;
 import it.polimi.ProgettoTIW.DAO.imageDAO;
 import it.polimi.ProgettoTIW.DAO.commentsDAO;
 import it.polimi.ProgettoTIW.beans.Image;
+import it.polimi.ProgettoTIW.beans.User;
 import it.polimi.ProgettoTIW.beans.Comment;
 
 import javax.servlet.ServletException;
@@ -58,7 +59,8 @@ public class GoToImage extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String imageIdParam = request.getParameter("id");
+        String imageIdParam = request.getParameter("Image_Id");
+        
         if (imageIdParam == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Image ID is required");
             return;
@@ -71,12 +73,20 @@ public class GoToImage extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid image ID format");
             return;
         }
+        
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println("User not logged in");
+            return;
+        }
 
         imageDAO imageDao = new imageDAO(connection);
         commentsDAO commentsDao = new commentsDAO(connection);
         Image image;
         List<Comment> comments;
-
+        int userCreator = 0;
+        
         try {
             image = imageDao.findImageById(imageId);
             if (image == null) {
@@ -84,10 +94,12 @@ public class GoToImage extends HttpServlet {
                 return;
             }
             comments = commentsDao.findCommentsByImage(imageId);
+            userCreator = imageDao.CheckCreator(image.getImage_Id());
             
             String path = getServletContext().getContextPath() + "/ImagePage.html";
     		ServletContext servletContext = getServletContext();
             WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+            ctx.setVariable("userCreator", userCreator);
             ctx.setVariable("image", image);
             ctx.setVariable("comments", comments);
             templateEngine.process(path, ctx, response.getWriter());

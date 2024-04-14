@@ -17,7 +17,9 @@
                 <p th:text="${comment.authorName + ': ' + comment.text}">Comment</p>
             </div>
         </div>
-    </div>
+        
+        <a th:href="@{/AddComment(ImageId=image.id)}" th:if="${session.user.id = userCreator}"> Remove Image</a>
+
     <div th:if="${image == null}">
         <p>No image details available.</p>
     </div>

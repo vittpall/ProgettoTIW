@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import it.polimi.ProgettoTIW.beans.Comment;
 
@@ -25,7 +26,8 @@ public class commentsDAO {
                     Comment comment = new Comment();
                     comment.setUser_id(result.getInt("id"));
                     comment.setText(result.getString("text"));
-                  //  comment.setUser_id(result.getInt("userId"));
+                    comment.setUser_id(result.getInt("userId"));
+                    comment.setPublication_date(new Date());
                     comments.add(comment);
                 }
             }
@@ -34,29 +36,21 @@ public class commentsDAO {
     }
 
     public void addComment(Comment comment) throws SQLException {
-        String query = "INSERT INTO comments (text, userId, imageId) VALUES (?, ?, ?)";
+        String query = "INSERT INTO comments (text, userId, imageId, creationDate) VALUES (?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, comment.getText());
             pstatement.setInt(2, comment.getUser_id());
             pstatement.setInt(3, comment.getImage_id());
+            pstatement.setDate(4, (java.sql.Date) comment.getPublication_date());
             pstatement.executeUpdate();
         }
     }
 
-    public boolean updateComment(int commentId, String newText) throws SQLException {
-        String query = "UPDATE comments SET text = ? WHERE id = ?";
-        try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, newText);
-            pstatement.setInt(2, commentId);
-            int rowsAffected = pstatement.executeUpdate();
-            return rowsAffected > 0;
-        }
-    }
 
-    public void deleteComment(int commentId) throws SQLException {
+    public void deleteComment(int imageId) throws SQLException {
         String query = "DELETE FROM comments WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setInt(1, commentId);
+            pstatement.setInt(1, imageId);
             pstatement.executeUpdate();
         }
     }
