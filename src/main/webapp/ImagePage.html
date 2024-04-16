@@ -1,25 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <title>Image Details</title>
-    <!-- Link to CSS files -->
-    
+    <!-- CSS here -->
 </head>
 <body>
+    <!-- Display image details if the image object is not null -->
     <div th:if="${image != null}">
-        <img th:src="@{${image.systemPath}}" th:alt="${image.title}" />
+        <!-- Displaying the image at its natural size -->
+        <img th:src="@{${image.systemPath}}" style="max-width: 100%;" th:alt="${image.title}" />
         <h2 th:text="${image.title}">Image Title</h2>
         <p th:text="${image.description}">Description</p>
+
+        <!-- Comments Section -->
         <div>
             <h3>Comments</h3>
             <div th:each="comment : ${comments}">
                 <p th:text="${comment.authorName + ': ' + comment.text}">Comment</p>
             </div>
         </div>
-        
-        <a th:href="@{/AddComment(ImageId=image.id)}" th:if="${session.user.id = userCreator}"> Remove Image</a>
 
+        <!-- Form to add a new comment -->
+        <div>
+            <h3>Add a Comment</h3>
+            <form th:action="@{/AddComment}" method="post">
+                <input type="hidden" name="imageId" th:value="${image.id}" />
+                <textarea name="comment" required placeholder="Write your comment here..."></textarea>
+                <button type="submit">Submit Comment</button>
+            </form>
+        </div>
+
+        <!-- Remove image form, only visible to the image owner -->
+        <div th:if="${session.user.id == userCreator}">
+            <form th:action="@{/RemoveImage}" method="post">
+                <input type="hidden" name="imageId" th:value="${image.id}" />
+                <button type="submit">Remove Image and Comments</button>
+            </form>
+        </div>
+
+        <!-- Navigation links -->
+        <a th:href="@{/GoToAlbumPage(albumId=${albumId})}">Back to Album Page</a>
+        <a th:href="@{/GoToHomePage}">Home Page</a>
+        <a th:href="@{/Logout}">Logout</a>
+
+    </div>
+
+    <!-- Display a message if no image is available -->
     <div th:if="${image == null}">
         <p>No image details available.</p>
     </div>
