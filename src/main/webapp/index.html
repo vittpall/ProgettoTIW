@@ -7,11 +7,11 @@
 </head>
 <body>
 
-<div th:if="${loginError}" class="alert alert-danger" role="alert">
+<div th:if="${session.loginError}" class="alert alert-danger" role="alert">
     Invalid username or password.
 </div>
 
-<form th:action="@{/CheckLogin}" method="post">
+<form action="CheckLogin" method="post">
     <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -25,7 +25,8 @@
     </div>
 </form>
 
-<p>Not a member? <a th:href="@{/Registration}">Register now</a></p>
+<p>Not a member? <a href="registration.html">Register now</a></p>
+
 
 </body>
 </html>

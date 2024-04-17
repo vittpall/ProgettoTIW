@@ -17,7 +17,7 @@ public class userDAO {
     }
 
     public User checkCredentials(String username, String password) throws SQLException {
-        String query = "SELECT id, username FROM users WHERE username = ? AND password = ?";
+        String query = "SELECT Id, Username, Password FROM User WHERE Username = ? AND Password = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             pstatement.setString(2, password);
@@ -27,9 +27,9 @@ public class userDAO {
                 else {
                     result.next();
                     User user = new User();
-                    user.setId(result.getInt("id"));
-                    user.setUsername(result.getString("username"));
-                    user.setPassword(result.getString("password"));
+                    user.setId(result.getInt("Id"));
+                    user.setUsername(result.getString("Username"));
+                    user.setPassword(result.getString("Password"));
                     return user;
                 }
             }
@@ -37,7 +37,7 @@ public class userDAO {
     }
     
     public int checkUsrn(String username) throws SQLException {
-        String query = "SELECT COUNT(*) as users_count FROM users WHERE username = ?";
+        String query = "SELECT COUNT(*) as users_count FROM User WHERE Username = ?";
         int users_count = 0;
         
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
