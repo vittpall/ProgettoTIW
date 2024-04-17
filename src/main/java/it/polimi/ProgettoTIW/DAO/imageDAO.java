@@ -20,18 +20,18 @@ public class imageDAO {
 
     public List<Image> findImagesByAlbum(String albumTitle, int Offset) throws SQLException {
         List<Image> images = new ArrayList<>();
-        String query = "SELECT id, title, path, creation_date, description FROM images as i, contains_images as c WHERE i.id = c.imagesId AND c.albumTitle = ? LIMIT 6 OFFSET ?";
+        String query = "SELECT Image_Id, Title, System_Path, Creation_Date, Description FROM `Image` as i, contains_images as c WHERE i.Image_Id = c.Image_Id AND c.albumTitle = ? LIMIT 6 OFFSET ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, albumTitle);
             pstatement.setInt(2, Offset);
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
                     Image image = new Image();
-                    image.setImage_Id(result.getInt("id"));
-                    image.setTitle(result.getString("title"));
-                    image.setSystem_Path(result.getString("path"));
-                    image.setCreation_Date(result.getDate("creation_date"));          
-                    image.setDescription(result.getString("description"));
+                    image.setImage_Id(result.getInt("Image_Id"));
+                    image.setTitle(result.getString("Title"));
+                    image.setSystem_Path(result.getString("System_Path"));
+                    image.setCreation_Date(result.getDate("Creation_Date"));          
+                    image.setDescription(result.getString("Description"));
                     images.add(image);
                 }
             }
@@ -40,7 +40,7 @@ public class imageDAO {
     }
 
     public void addImage(Image image) throws SQLException {
-        String query = "INSERT INTO images (title, description, systemPath, creationDate) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO `Image` (Title, Description, System_Path, Creation_Date) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, image.getTitle());
             pstatement.setString(2, image.getDescription());
@@ -51,7 +51,7 @@ public class imageDAO {
     }
 
     public void updateImage(Image image) throws SQLException {
-        String query = "UPDATE images SET title = ?, path = ? WHERE id = ?";
+        String query = "UPDATE `Image` SET Title = ?, path = ? WHERE Image_Id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, image.getTitle());
             pstatement.setString(2, image.getSystem_Path());
@@ -61,7 +61,7 @@ public class imageDAO {
     }
 
     public void deleteImage(int imageId) throws SQLException {
-        String query = "DELETE FROM images WHERE id = ?";
+        String query = "DELETE FROM `Image` WHERE Image_id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, imageId);
             pstatement.executeUpdate();
@@ -70,14 +70,14 @@ public class imageDAO {
 
 	public int RetrieveNextImageId() throws SQLException {
 		int images_id = 0;
-		String query = "SELECT id FROM images ORDER BY decr LIMIT 1";
+		String query = "SELECT Image_id FROM `Image` ORDER BY decr LIMIT 1";
 		try (PreparedStatement pstatement = con.prepareStatement(query);)
 		{
 			try(ResultSet result = pstatement.executeQuery())
 			{
 				while(result.next())
 				{
-					images_id = result.getInt("id");
+					images_id = result.getInt("Image_id");
 				}
 			}
 		}
@@ -85,18 +85,18 @@ public class imageDAO {
 	}
 	
 	public Image findImageById(int imageId) throws SQLException {
-        String query = "SELECT id, title, path, creation_date, description FROM images WHERE id = ?";
+        String query = "SELECT Image_id, Title, path, creation_date, Description FROM `Image` WHERE id = ?";
         Image image = null;
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, imageId);
             try (ResultSet result = pstatement.executeQuery()) {
                 if (result.next()) {
                     image = new Image();
-                    image.setImage_Id(result.getInt("id"));
-                    image.setTitle(result.getString("title"));
+                    image.setImage_Id(result.getInt("Image_id"));
+                    image.setTitle(result.getString("Title"));
                     image.setSystem_Path(result.getString("path"));
                     image.setCreation_Date(result.getDate("creation_date"));
-                    image.setDescription(result.getString("description"));
+                    image.setDescription(result.getString("Description"));
                 }
             }
         }
@@ -105,7 +105,7 @@ public class imageDAO {
 	
 	public int CheckCreator(int imageId) throws SQLException
 	{
-		String query = "SELECT UserId FROM Contain_image as C, Images as I WHERE C.imageId = I.imageID";
+		String query = "SELECT UserId FROM Contain_image as C, Images as I WHERE C.ImageId = I.ImageID";
 		int user_id = 0;
 		try(PreparedStatement pstatement = con.prepareStatement(query))
 		{
@@ -113,7 +113,7 @@ public class imageDAO {
 			{
 				if(result.next())
 				{
-					user_id = result.getInt("userId");
+					user_id = result.getInt("Image_id");
 				}
 			}
 		}
@@ -124,7 +124,7 @@ public class imageDAO {
 	public List<Image> RetrieveAllImagesByUser(User user) throws SQLException
 	{
         List<Image> images = new ArrayList<>();
-        String query = "SELECT id, title, path, creationDate, description FROM images as i, contains_images as c WHERE i.id = c.imageId AND c.userId = ?";
+        String query = "SELECT id, title, System_Path, creationDate, description FROM images as i, contains_images as c WHERE i.id = c.imageId AND c.userId = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, user.getId());
             try (ResultSet result = pstatement.executeQuery();) {
@@ -132,7 +132,7 @@ public class imageDAO {
                     Image image = new Image();
                     image.setImage_Id(result.getInt("id"));
                     image.setTitle(result.getString("title"));
-                    image.setSystem_Path(result.getString("path"));
+                    image.setSystem_Path(result.getString("System_Path"));
                     image.setCreation_Date(new Date());
                     image.setDescription(result.getString("description"));
                     images.add(image);

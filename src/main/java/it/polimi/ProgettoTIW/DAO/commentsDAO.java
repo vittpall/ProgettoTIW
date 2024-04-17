@@ -18,7 +18,7 @@ public class commentsDAO {
 
     public List<Comment> findCommentsByImage(int imageId) throws SQLException {
         List<Comment> comments = new ArrayList<>();
-        String query = "SELECT id, text, userId FROM comments WHERE imageId = ?";
+        String query = "SELECT * FROM `Comment` WHERE Image_Id= ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, imageId);
             try (ResultSet result = pstatement.executeQuery();) {
@@ -26,7 +26,6 @@ public class commentsDAO {
                     Comment comment = new Comment();
                     comment.setUser_id(result.getInt("id"));
                     comment.setText(result.getString("text"));
-                    comment.setUser_id(result.getInt("userId"));
                     comment.setPublication_date(new Date());
                     comments.add(comment);
                 }
@@ -36,7 +35,7 @@ public class commentsDAO {
     }
 
     public void addComment(Comment comment) throws SQLException {
-        String query = "INSERT INTO comments (text, userId, imageId, creationDate) VALUES (?, ?, ?)";
+        String query = "INSERT INTO `Comment` (Text, Id, Image_Id, Publication_date) VALUES (?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, comment.getText());
             pstatement.setInt(2, comment.getUser_id());
@@ -48,7 +47,7 @@ public class commentsDAO {
 
 
     public void deleteComment(int imageId) throws SQLException {
-        String query = "DELETE FROM comments WHERE id = ?";
+        String query = "DELETE FROM `Comment` WHERE Id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, imageId);
             pstatement.executeUpdate();

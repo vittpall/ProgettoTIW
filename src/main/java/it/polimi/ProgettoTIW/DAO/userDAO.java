@@ -39,7 +39,7 @@ public class userDAO {
     }
     
     public int checkUsrn(String username) throws SQLException {
-        String query = "SELECT COUNT(*) as users_count FROM User WHERE Username = ?";
+        String query = "SELECT COUNT(*) as users_count FROM `User` WHERE Username = ?";
         int users_count = 0;
         
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -56,7 +56,7 @@ public class userDAO {
     }
 
     public void registerUser(User user) throws SQLException {
-        String query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        String query = "INSERT INTO `User` (Username, Email, Password) VALUES (?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, user.getUsername());
             pstatement.setString(2, user.getEmail()); 
@@ -66,7 +66,7 @@ public class userDAO {
     }
 
     public void updateUser(User user) throws SQLException {
-        String query = "UPDATE users SET name = ? WHERE id = ?";
+        String query = "UPDATE `User` SET name = ? WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, user.getUsername());
             pstatement.setInt(2, user.getId());
@@ -75,7 +75,7 @@ public class userDAO {
     }
 
     public void deleteUser(int userId) throws SQLException {
-        String query = "DELETE FROM users WHERE id = ?";
+        String query = "DELETE FROM `User` WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, userId);
             pstatement.executeUpdate();
@@ -84,14 +84,14 @@ public class userDAO {
     
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT id, username, email FROM users";
+        String query = "SELECT Id, Username, Email FROM `User`";
         try (PreparedStatement pstatement = con.prepareStatement(query);
              ResultSet result = pstatement.executeQuery();) {
             while (result.next()) {
                 User user = new User();
-                user.setId(result.getInt("id"));
-                user.setUsername(result.getString("username"));
-                user.setEmail(result.getString("email"));
+                user.setId(result.getInt("Id"));
+                user.setUsername(result.getString("Username"));
+                user.setEmail(result.getString("Email"));
                 users.add(user);
             }
         }

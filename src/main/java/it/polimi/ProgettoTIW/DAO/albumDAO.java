@@ -20,14 +20,14 @@ public class albumDAO {
 
     public List<Album> findAlbumsByUser(String username) throws SQLException {
         List<Album> albums = new ArrayList<>();
-        String query = "SELECT id, title, username FROM albums WHERE username =  ORDER BY creationDate DESC?";
+        String query = "SELECT User_id, Title, Username FROM `Album` WHERE Username =?  ORDER BY Creation_Date DESC?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
                     Album album = new Album();
-                    album.setUser_id(result.getInt("id"));
-                    album.setTitle(result.getString("title"));
+                    album.setUser_id(result.getInt("User_id"));
+                    album.setTitle(result.getString("Title"));
                     album.setUsername(username);
                     albums.add(album);
                 }
@@ -37,7 +37,7 @@ public class albumDAO {
     }
     
     public void createAlbum(Album album) throws SQLException {
-        String query = "INSERT INTO albums (title, userId, creationDate) VALUES (?, ?)";
+        String query = "INSERT INTO `Album` (Title, UserId, Creation_Date) VALUES (?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, album.getTitle());
             pstatement.setInt(2, album.getUser_id());
@@ -49,7 +49,7 @@ public class albumDAO {
     //contain_images n-n
     public void AddImagesToAlbum (int images_id, int User_id, String title) throws SQLException
     {
-    	String query = "INSERT INTO Contains_Images (userId, title, imageId) VALUES (?,?,?)";
+    	String query = "INSERT INTO Contains_Images (User_Id, title, Image_Id) VALUES (?,?,?)";
     	try(PreparedStatement pstatement = con.prepareStatement(query);)
     	{
     		pstatement.setInt(1, images_id);
@@ -59,7 +59,7 @@ public class albumDAO {
     }
 
     public void updateAlbum(Album album) throws SQLException {
-        String query = "UPDATE albums SET title = ? WHERE id = ?";
+        String query = "UPDATE a`Album` SET title = ? WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, album.getTitle());
             pstatement.setInt(2, album.getUser_id());
