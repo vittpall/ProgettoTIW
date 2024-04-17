@@ -58,6 +58,7 @@ public class Registration extends HttpServlet {
         LocalDateTime currentDateTime = LocalDateTime.now();
         User new_user = new User();
 
+      
         //check if pass and rep pass are equals
         testpwd = pwd1.equals(pwd2);
         if (!testpwd) {

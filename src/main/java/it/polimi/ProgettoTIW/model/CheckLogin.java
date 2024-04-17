@@ -1,6 +1,7 @@
 package it.polimi.ProgettoTIW.model;
 
 import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,7 +57,6 @@ public class CheckLogin extends HttpServlet {
         try {
             user = userDao.checkCredentials(usrn, pwd);
         } catch (SQLException e) {
-        	e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Internal server error, retry later");
             return;
