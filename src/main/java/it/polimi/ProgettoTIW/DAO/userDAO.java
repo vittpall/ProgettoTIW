@@ -1,6 +1,7 @@
 package it.polimi.ProgettoTIW.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,13 +64,13 @@ public class userDAO {
     public void registerUser(User user) throws SQLException {
         String query = "INSERT INTO `User` (Username, Email, Password, Reg_Date) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-        	pstatement.setInt(1, user.getId());
-            pstatement.setString(2, user.getUsername());
-            pstatement.setString(3, user.getEmail());
-            pstatement.setString(4, user.getPassword());
-            // Assuming reg_date is a LocalDateTime, convert to java.sql.Date
-            java.sql.Date sqlDate = java.sql.Date.valueOf(user.getReg_Date().toLocalDate());
-            pstatement.setDate(5, sqlDate);
+        	//pstatement.setInt(1, user.getId());
+            pstatement.setString(1, user.getUsername());
+            pstatement.setString(2, user.getEmail());
+            pstatement.setString(3, user.getPassword());
+         // Convert java.util.Date to java.sql.Date before setting it.
+            java.sql.Date sqlDate = new java.sql.Date(user.getReg_Date().getTime());
+            pstatement.setDate(4, sqlDate);
         	
             pstatement.executeUpdate();
         }

@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
+//import java.sql.Date;
+import java.util.Date;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,7 +57,8 @@ public class Registration extends HttpServlet {
         boolean testusnunivocity = true;
         int testusnunivocity_count = 0;
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        //LocalDateTime currentDateTime = LocalDateTime.now();
+        Date currentDateTime = new Date();
         User new_user = new User();
 
       
@@ -90,6 +93,7 @@ public class Registration extends HttpServlet {
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Internal server error, retry later");
+            e.printStackTrace();
             return;
         }
 
@@ -105,6 +109,7 @@ public class Registration extends HttpServlet {
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Internal server error");
+                e.printStackTrace();
             }
 
             response.sendRedirect(getServletContext().getContextPath() + "/GoToHomePage");

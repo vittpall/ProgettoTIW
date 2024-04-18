@@ -1,6 +1,6 @@
 package it.polimi.ProgettoTIW.beans;
 
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalDateTime;
 
 public class User {
