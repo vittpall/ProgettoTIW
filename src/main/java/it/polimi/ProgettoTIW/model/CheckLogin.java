@@ -75,13 +75,13 @@ public class CheckLogin extends HttpServlet {
             response.getWriter().println("Internal server error, retry later");
             return;
         }
-
+        String path;
         if (user == null) {
-        	String loginError = "User not registered. Create a new one";
-    		String path = "/index.html";
+        	//String loginError = "User not registered. Create a new one";
+        	path = "/index.html";
     		ServletContext servletContext = getServletContext();
     		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-    		ctx.setVariable("loginError", );
+    		ctx.setVariable("loginError", "Incorrect username or password" );
     		templateEngine.process(path, ctx, response.getWriter());
         } else {
             session.setAttribute("user", user);
@@ -90,7 +90,9 @@ public class CheckLogin extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().println(usrn);
             session.setAttribute("user", user);
-            response.sendRedirect(request.getServletContext().getContextPath()+"/GoToHomePage");
+            path = getServletContext().getContextPath() + "/GoToHomePage";
+			response.sendRedirect(path);
+            
            
         }
     }

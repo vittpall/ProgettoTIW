@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,25 +46,35 @@ public class userDAO {
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
-                if (!result.isBeforeFirst())
+               /* if (!result.isBeforeFirst())
                     return -1;
                 else {
                     users_count = result.getInt("users_count");
                     return users_count;
+                } */
+                if (result.next()) { // Ensure the cursor is moved to the first record
+                    users_count = result.getInt("users_count");
                 }
+                return users_count;
             }
         }
     }
 
     public void registerUser(User user) throws SQLException {
-        String query = "INSERT INTO `User` (Username, Email, Password) VALUES (?, ?, ?)";
+        String query = "INSERT INTO `User` (Username, Email, Password, Reg_Date) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
-            pstatement.setString(1, user.getUsername());
-            pstatement.setString(2, user.getEmail()); 
-            pstatement.setString(3, user.getPassword());
+        	pstatement.setInt(1, user.getId());
+            pstatement.setString(2, user.getUsername());
+            pstatement.setString(3, user.getEmail());
+            pstatement.setString(4, user.getPassword());
+            // Assuming reg_date is a LocalDateTime, convert to java.sql.Date
+            java.sql.Date sqlDate = java.sql.Date.valueOf(user.getReg_Date().toLocalDate());
+            pstatement.setDate(5, sqlDate);
+        	
             pstatement.executeUpdate();
         }
     }
+
 
     public void updateUser(User user) throws SQLException {
         String query = "UPDATE `User` SET name = ? WHERE id = ?";

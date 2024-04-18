@@ -114,8 +114,8 @@ public class GoToHomePage extends HttpServlet {
             return;
         }	
         
-        
-		String path = getServletContext().getContextPath() + "/Home.html";
+        String path = "/WEB-INF/HomePage.html";
+		
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("ImagesUser", imagesUser);
@@ -124,7 +124,10 @@ public class GoToHomePage extends HttpServlet {
 		templateEngine.process(path, ctx, response.getWriter());
         
     }
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
     public void destroy() {
         try {
             if (connection != null) {
