@@ -85,30 +85,26 @@ public class GoToHomePage extends HttpServlet {
         }
         
         userDAO userDao = new userDAO(connection);
-        try {
-            UserList = userDao.getAllUsers();
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Unable to retrieve albums");
-            return;
-        }
-
         imageDAO imageDao = new imageDAO(connection);
         albumDAO albumDao = new albumDAO(connection);
         List<Image> imagesUser = new ArrayList<>();
-        List<Album> UserAlbum;
+        List<Album> UserAlbum = new ArrayList<>();
         List<List<Album>> OtherUserAlbum = new ArrayList<>();
         try {
-        	
-      	 imagesUser = imageDao.RetrieveAllImagesByUser(user);
-      	 UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
+       
+        	UserList = userDao.getAllUsers();
+        	//this call throws the SQLException, probably it's due to the query syntax
+      //  	imagesUser = imageDao.RetrieveAllImagesByUser(user);
+        	UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
             for(User u : UserList)
             {
+            	
             	//find all the albums and add them to OtherAlbum except when they refer to the user of the session 
-          //  	if(!u.getUsername().equals(user.getUsername()))
-         //   	OtherUserAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
+            	if(!u.getUsername().equals(user.getUsername()))
+            		OtherUserAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
             }
         } catch (SQLException e) {
+        		
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Unable to retrieve albums");
             return;

@@ -13,14 +13,14 @@ import it.polimi.ProgettoTIW.beans.Album;
 
 public class albumDAO {
     private final Connection con;
-
+    
     public albumDAO(Connection connection) {
         this.con = connection;
     }
 
     public List<Album> findAlbumsByUser(String username) throws SQLException {
         List<Album> albums = new ArrayList<>();
-        String query = "SELECT User_id, Title, Username FROM `Album` WHERE Username = ?  ORDER BY Creation_Date DESC";
+        String query = "SELECT * FROM Album WHERE Username = ?  ORDER BY Creation_Date DESC";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {
@@ -28,7 +28,8 @@ public class albumDAO {
                     Album album = new Album();
                     album.setUser_id(result.getInt("User_id"));
                     album.setTitle(result.getString("Title"));
-                    album.setUsername(username);
+                    album.setUsername("Username");
+                    album.setCreation_Date(result.getDate("Creation_Date"));
                     albums.add(album);
                 }
             }
@@ -59,7 +60,7 @@ public class albumDAO {
     }
 
     public void updateAlbum(Album album) throws SQLException {
-        String query = "UPDATE a`Album` SET title = ? WHERE id = ?";
+        String query = "UPDATE `Album` SET title = ? WHERE id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, album.getTitle());
             pstatement.setInt(2, album.getUser_id());

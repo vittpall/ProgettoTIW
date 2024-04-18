@@ -1,5 +1,6 @@
 package it.polimi.ProgettoTIW.beans;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class User {
@@ -8,7 +9,7 @@ public class User {
     private String Username;
     private String Email;
     private String Password;
-    private LocalDateTime Reg_Date;
+    private Date Reg_Date;
 
     public String getUsername() {
         return Username;
@@ -18,7 +19,7 @@ public class User {
         return Email;
     }
 
-    public LocalDateTime getReg_Date() {
+    public Date getReg_Date() {
         return Reg_Date;
     }
 
@@ -39,7 +40,7 @@ public class User {
         Password = password;
     }
 
-    public void setReg_Date(LocalDateTime currentDateTime) {
+    public void setReg_Date(Date currentDateTime) {
         Reg_Date = currentDateTime;
     }
 
@@ -51,4 +52,5 @@ public class User {
     {
     	this.Id = Id;
     }
+
 }
