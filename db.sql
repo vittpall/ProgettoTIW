@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `Album`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Album` (
   `Username` int NOT NULL,
-  `User_id` varchar(255) NOT NULL,
+  `User_id` int NOT NULL,
   `Title` varchar(255) DEFAULT NULL,
   `Creation_Date` date DEFAULT NULL,
   PRIMARY KEY (`Username`,`User_id`)
@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS `Comment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Comment` (
   `Image_Id` int NOT NULL,
-  `Id` varchar(255) NOT NULL,
+  `Id` int NOT NULL,
   `Publication_date` date DEFAULT NULL,
   `Text` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`Image_Id`,`Id`)
@@ -76,8 +76,8 @@ DROP TABLE IF EXISTS `Contains_Images`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Contains_Images` (
   `Image_Id` int NOT NULL,
-  `title` varchar(45) NOT NULL,
-  `User_Id` varchar(45) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `User_Id` int NOT NULL,
   PRIMARY KEY (`Image_Id`,`title`,`User_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -126,7 +126,7 @@ DROP TABLE IF EXISTS `Publish_Image`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Publish_Image` (
   `image_Id` int NOT NULL,
-  `User_Id` varchar(255) NOT NULL,
+  `User_Id` int NOT NULL,
   PRIMARY KEY (`image_Id`,`User_Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -163,6 +163,7 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
+INSERT INTO `User` VALUES (1,'Pietro','a@gmail.com','sergio','2023-01-02');
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -175,4 +176,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-17 11:06:05
+-- Dump completed on 2024-04-18 16:00:14
