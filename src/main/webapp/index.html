@@ -7,10 +7,9 @@
 </head>
 <body>
 
-<div th:if="${session.loginError}" class="alert alert-danger" role="alert">
-    Invalid username or password.
-</div>
 
+<div th:text="${loginError}"></div>
+ 
 <form action="CheckLogin" method="post">
     <div class="form-group">
         <label for="username">Username:</label>

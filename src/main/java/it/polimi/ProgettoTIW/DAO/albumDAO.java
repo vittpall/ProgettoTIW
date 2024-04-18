@@ -20,7 +20,7 @@ public class albumDAO {
 
     public List<Album> findAlbumsByUser(String username) throws SQLException {
         List<Album> albums = new ArrayList<>();
-        String query = "SELECT User_id, Title, Username FROM `Album` WHERE Username =?  ORDER BY Creation_Date DESC?";
+        String query = "SELECT User_id, Title, Username FROM `Album` WHERE Username = ?  ORDER BY Creation_Date DESC";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, username);
             try (ResultSet result = pstatement.executeQuery();) {

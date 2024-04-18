@@ -6,7 +6,7 @@ public class Album {
     //primary key
     //i added Username because i use it to retrieve data from the list of album
 	private String Username; 
-    private Integer User_id;
+    private int User_id;
     private String Title;
 
     private Date Creation_Date;
@@ -19,7 +19,7 @@ public class Album {
         Title = title;
     }
 
-    public void setUser_id(Integer user_id) {
+    public void setUser_id(int user_id) {
         User_id = user_id;
     }
     
@@ -28,7 +28,7 @@ public class Album {
     	this.Username = Username;
     } 
 
-    public Integer getUser_id() {
+    public int getUser_id() {
         return User_id;
     }
 

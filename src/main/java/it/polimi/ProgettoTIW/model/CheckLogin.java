@@ -6,6 +6,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -22,6 +28,7 @@ import it.polimi.ProgettoTIW.DAO.userDAO;
 public class CheckLogin extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
+    private TemplateEngine templateEngine;
 
     public void init() throws ServletException {
         try {
@@ -32,6 +39,13 @@ public class CheckLogin extends HttpServlet {
             String password = context.getInitParameter("dbPassword");
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
+            
+            ServletContext servletContext = getServletContext();
+    		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+    		templateResolver.setTemplateMode(TemplateMode.HTML);
+    		this.templateEngine = new TemplateEngine();
+    		this.templateEngine.setTemplateResolver(templateResolver);
+    		templateResolver.setSuffix(".html");
 
         } catch (ClassNotFoundException e) {
             throw new UnavailableException("Can't load database driver");
@@ -63,8 +77,12 @@ public class CheckLogin extends HttpServlet {
         }
 
         if (user == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println("User not registered. Create a new one");
+        	String loginError = "User not registered. Create a new one";
+    		String path = "/index.html";
+    		ServletContext servletContext = getServletContext();
+    		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+    		ctx.setVariable("loginError", );
+    		templateEngine.process(path, ctx, response.getWriter());
         } else {
             session.setAttribute("user", user);
             response.setStatus(HttpServletResponse.SC_OK);
@@ -73,6 +91,7 @@ public class CheckLogin extends HttpServlet {
             response.getWriter().println(usrn);
             session.setAttribute("user", user);
             response.sendRedirect(request.getServletContext().getContextPath()+"/GoToHomePage");
+           
         }
     }
 
