@@ -84,7 +84,7 @@ public class userDAO {
     
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT Id, Username, Email FROM `User`";
+        String query = "SELECT * FROM `User`";
         try (PreparedStatement pstatement = con.prepareStatement(query);
              ResultSet result = pstatement.executeQuery();) {
             while (result.next()) {
@@ -92,6 +92,8 @@ public class userDAO {
                 user.setId(result.getInt("Id"));
                 user.setUsername(result.getString("Username"));
                 user.setEmail(result.getString("Email"));
+                user.setReg_Date(result.getDate("Reg_Date"));
+                user.setPassword(result.getString("Username"));
                 users.add(user);
             }
         }
