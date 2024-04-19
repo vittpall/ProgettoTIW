@@ -51,6 +51,7 @@ public class Registration extends HttpServlet {
     		this.templateEngine = new TemplateEngine();
     		this.templateEngine.setTemplateResolver(templateResolver);
     		templateResolver.setSuffix(".html");
+    		
 
         } catch (ClassNotFoundException e) {
             throw new UnavailableException("Can't load database driver");
@@ -61,6 +62,8 @@ public class Registration extends HttpServlet {
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+        
         String usrn = request.getParameter("username");
         String email = request.getParameter("email");
         String pwd1 = request.getParameter("password");
@@ -69,14 +72,14 @@ public class Registration extends HttpServlet {
         boolean testemail = true;
      //   boolean testusnunivocity = true;
     //    int testusnunivocity_count = 0;
-
+        
         //LocalDateTime currentDateTime = LocalDateTime.now();
         Date currentDateTime = new Date();
         User new_user = new User();
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         String path = "/registration.html"; // Note the leading slash if it is in the root
-
+        
 
         boolean errorDetected = false;
       
@@ -87,8 +90,8 @@ public class Registration extends HttpServlet {
             new_user.setPassword(pwd1);
             new_user.setUsername(usrn);
             request.getSession().setAttribute("user", new_user);
-          //  request.getSession().setAttribute("pwdError", "The pass aren't equals");
-            ctx.setVariable("pwdError", "Passwords do not match");
+            request.getSession().setAttribute("pwdError", "The pass aren't equals");
+            //ctx.setVariable("pwdError", "Passwords do not match");
             errorDetected = true;
         }
 
@@ -133,15 +136,19 @@ public class Registration extends HttpServlet {
                 path = "/index.html"; // Redirect to login page after successful registration
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().println("Registration successful");
+                response.sendRedirect(getServletContext().getContextPath() + "/GoToHomePage");
+                return;
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Internal server error");
                 e.printStackTrace();
             }
 
-            response.sendRedirect(getServletContext().getContextPath() + "/GoToHomePage");
+            
         } 
         templateEngine.process(path, ctx, response.getWriter());
+     
+       
 
     }
     

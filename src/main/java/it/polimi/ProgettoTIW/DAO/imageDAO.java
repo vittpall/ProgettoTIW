@@ -128,9 +128,9 @@ public class imageDAO {
                 "FROM Image AS i " +
                 "INNER JOIN Contains_Image AS c ON i.Image_id = c.Image_Id " +
                 "WHERE c.User_Id = ?";
-        try (PreparedStatement pstatement = con.prepareStatement(query);) {
+        try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, user.getId());
-            try (ResultSet result = pstatement.executeQuery();) {
+            try (ResultSet result = pstatement.executeQuery()) {
                 while (result.next()) {
                     Image image = new Image();
                     image.setImage_Id(result.getInt("i.Image_id"));

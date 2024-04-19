@@ -94,7 +94,7 @@ public class GoToHomePage extends HttpServlet {
        
         	UserList = userDao.getAllUsers();
         	//this call throws the SQLException, probably it's due to the query syntax
-      //  	imagesUser = imageDao.RetrieveAllImagesByUser(user);
+        	imagesUser = imageDao.RetrieveAllImagesByUser(user);
         	UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
             for(User u : UserList)
             {
