@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>User Albums</title>
+    <link rel="stylesheet" href="css/homepagestyle.css">
 </head>
 <body>
     <h1>User Albums</h1>
@@ -16,15 +17,15 @@
         </ul>
     </div>
     
-    <h2>Others Albums</h2>
-    <div th:each="otherUserAlbumList : ${OtherUserAlbum}">
-        <h2 th:text="${otherUserAlbumList.username}'s Albums"></h2>
-        <ul>
-            <li th:each="album : ${otherUserAlbumList.albums}">
-                <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title})}" th:text="${album.Title}"></a>
-            </li>
-        </ul>
-    </div>
+    <h2>Others' Albums</h2>
+<div th:each="entry : ${OtherUserAlbums}">
+    <h3 th:text="${entry.key.username} + '\'s Albums'"></h3>
+    <ul>
+        <li th:each="album : ${entry.value}">
+            <a th:href="@{/GoToAlbumPage(albumTitle=${album.title})}" th:text="${album.title}"></a>
+        </li>
+    </ul>
+</div>
     
     <!-- Test -->
     
@@ -48,7 +49,7 @@
             <!-- Submit button for both actions -->
             <input type="submit" name="action" value="CreateAlbum">
         </form>
-        <a href="@{/Logout}">Logout</a>
+        <a th:href="@{/Logout}">Logout</a>
     </div>
 </body>
 </html>

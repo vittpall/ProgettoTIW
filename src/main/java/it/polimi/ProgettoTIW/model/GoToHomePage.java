@@ -16,7 +16,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -26,6 +28,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import it.polimi.ProgettoTIW.beans.Album;
 import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.User;
+
 import it.polimi.ProgettoTIW.DAO.albumDAO;
 import it.polimi.ProgettoTIW.DAO.imageDAO;
 import it.polimi.ProgettoTIW.DAO.userDAO;
@@ -89,9 +92,11 @@ public class GoToHomePage extends HttpServlet {
         albumDAO albumDao = new albumDAO(connection);
         List<Image> imagesUser = new ArrayList<>();
         List<Album> UserAlbum = new ArrayList<>();
-        List<List<Album>> OtherUserAlbum = new ArrayList<>();
+     //   List<List<Album>> OtherUserAlbum = new ArrayList<>();
+        Map<User, List<Album>> OtherUserAlbum = new HashMap<>();
+        
         try {
-       
+        	/*
         	UserList = userDao.getAllUsers();
         	//this call throws the SQLException, probably it's due to the query syntax
         	imagesUser = imageDao.RetrieveAllImagesByUser(user);
@@ -102,6 +107,16 @@ public class GoToHomePage extends HttpServlet {
             	//find all the albums and add them to OtherAlbum except when they refer to the user of the session 
             	if(!u.getUsername().equals(user.getUsername()))
             		OtherUserAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
+            } 
+            */
+        	UserList = userDao.getAllUsers();
+            imagesUser = imageDao.RetrieveAllImagesByUser(user);
+            UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
+            for (User u : UserList) {
+                if (!u.getUsername().equals(user.getUsername())) {
+                    List<Album> albums = albumDao.findAlbumsByUser(u.getUsername());
+                    OtherUserAlbum.put(u, albums);
+                }
             }
         } catch (SQLException e) {
         		

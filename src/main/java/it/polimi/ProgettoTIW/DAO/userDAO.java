@@ -1,7 +1,7 @@
 package it.polimi.ProgettoTIW.DAO;
 
 import java.sql.Connection;
-import java.sql.Date;
+//import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -105,7 +105,7 @@ public class userDAO {
                 user.setUsername(result.getString("Username"));
                 user.setEmail(result.getString("Email"));
                 user.setReg_Date(result.getDate("Reg_Date"));
-                user.setPassword(result.getString("Username"));
+                user.setPassword(result.getString("Password"));
                 users.add(user);
             }
         }

@@ -1,7 +1,7 @@
 package it.polimi.ProgettoTIW.beans;
 
 import java.util.Date;
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 
 public class User {
     

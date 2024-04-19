@@ -1,3 +1,1 @@
-INSERT INTO `User` VALUES (2,'a','b@gmail.com','a','2024-09-02');
-ALTER TABLE `User`
-MODIFY `Id` INT AUTO_INCREMENT;
+SELECT * FROM TIW_Project.User;ù
