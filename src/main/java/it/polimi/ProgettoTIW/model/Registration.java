@@ -90,8 +90,10 @@ public class Registration extends HttpServlet {
             new_user.setPassword(pwd1);
             new_user.setUsername(usrn);
             request.getSession().setAttribute("user", new_user);
-            request.getSession().setAttribute("pwdError", "The pass aren't equals");
-            //ctx.setVariable("pwdError", "Passwords do not match");
+            
+          //  request.getSession().setAttribute("pwdError", "The pass aren't equals");
+          //  System.out.println((String)(request.getAttribute("pwdError")));
+            ctx.setVariable("pwdError", "Passwords do not match");
             errorDetected = true;
         }
 

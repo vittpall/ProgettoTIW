@@ -74,12 +74,12 @@ a:hover {
 }
 
 /* Error message styling */
+/*
 div[th\\:text] {
     color: #d9534f;
     background: #ffd2d2;
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 15px;
-    display: none; /* Initially hide and show via JavaScript or server-side logic if there are errors */
-}
-
+    display: none; /* Initially hide and show via JavaScript or server-side logic if there are errors 
+} */

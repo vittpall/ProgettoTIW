@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 import java.util.List;
 import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.User;
@@ -124,20 +124,17 @@ public class imageDAO {
 	public List<Image> RetrieveAllImagesByUser(User user) throws SQLException
 	{
         List<Image> images = new ArrayList<>();
-        String query = "SELECT i.Image_id, i.title, i.Creation_Date, i.Description, i.System_Path " +
-                "FROM Image AS i " +
-                "INNER JOIN Contains_Image AS c ON i.Image_id = c.Image_Id " +
-                "WHERE c.User_Id = ?";
+        String query = "SELECT i.Image_id, i.Title, i.Creation_Date, i.Description, i.System_Path FROM Image i INNER JOIN Contains_Images c ON i.Image_id = c.Image_Id  WHERE c.User_Id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, user.getId());
             try (ResultSet result = pstatement.executeQuery()) {
                 while (result.next()) {
                     Image image = new Image();
-                    image.setImage_Id(result.getInt("i.Image_id"));
-                    image.setTitle(result.getString("i.title"));
-                    image.setCreation_Date(result.getDate("i.Creation_Date"));
-                    image.setDescription(result.getString("i.Description"));
-                    image.setSystem_Path(result.getString("i.System_Path"));                 
+                    image.setImage_Id(result.getInt("Image_id"));
+                    image.setTitle(result.getString("Title"));
+                    image.setCreation_Date(result.getDate("Creation_Date"));
+                    image.setDescription(result.getString("Description"));
+                    image.setSystem_Path(result.getString("System_Path"));                 
                     images.add(image);
                 }
             }

@@ -106,7 +106,7 @@ public class GoToHomePage extends HttpServlet {
         } catch (SQLException e) {
         		
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Unable to retrieve albums");
+            response.getWriter().println("Unable to retrieve albums"+ e.getMessage());
             return;
         }	
         
