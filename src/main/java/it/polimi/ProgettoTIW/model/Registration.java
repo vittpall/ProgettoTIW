@@ -5,6 +5,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -28,6 +33,7 @@ import it.polimi.ProgettoTIW.DAO.userDAO;
 public class Registration extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
+    private TemplateEngine templateEngine;
 
     public void init() throws ServletException {
         try {
@@ -38,6 +44,13 @@ public class Registration extends HttpServlet {
             String password = context.getInitParameter("dbPassword");
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
+            
+            ServletContext servletContext = getServletContext();
+    		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+    		templateResolver.setTemplateMode(TemplateMode.HTML);
+    		this.templateEngine = new TemplateEngine();
+    		this.templateEngine.setTemplateResolver(templateResolver);
+    		templateResolver.setSuffix(".html");
 
         } catch (ClassNotFoundException e) {
             throw new UnavailableException("Can't load database driver");
@@ -54,13 +67,18 @@ public class Registration extends HttpServlet {
         String pwd2 = request.getParameter("confirmPassword");
         boolean testpwd = true;
         boolean testemail = true;
-        boolean testusnunivocity = true;
-        int testusnunivocity_count = 0;
+     //   boolean testusnunivocity = true;
+    //    int testusnunivocity_count = 0;
 
         //LocalDateTime currentDateTime = LocalDateTime.now();
         Date currentDateTime = new Date();
         User new_user = new User();
+        ServletContext servletContext = getServletContext();
+        final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+        String path = "/registration.html"; // Note the leading slash if it is in the root
 
+
+        boolean errorDetected = false;
       
         //check if pass and rep pass are equals
         testpwd = pwd1.equals(pwd2);
@@ -69,7 +87,9 @@ public class Registration extends HttpServlet {
             new_user.setPassword(pwd1);
             new_user.setUsername(usrn);
             request.getSession().setAttribute("user", new_user);
-            request.getSession().setAttribute("pwdError", "The pass aren't equals");
+          //  request.getSession().setAttribute("pwdError", "The pass aren't equals");
+            ctx.setVariable("pwdError", "Passwords do not match");
+            errorDetected = true;
         }
 
         testemail = CheckEmail(email);
@@ -79,15 +99,21 @@ public class Registration extends HttpServlet {
             new_user.setPassword(pwd1);
             new_user.setUsername(usrn);
             request.getSession().setAttribute("user", new_user);
-            request.getSession().setAttribute("emailError", "The email syntax isnt right");
+          //  request.getSession().setAttribute("emailError", "The email syntax isnt right");
+            ctx.setVariable("emailError", "Invalid email format");
+            errorDetected = true;
         }
 
         userDAO userDao = new userDAO(connection);
         try {
-            testusnunivocity_count = userDao.checkUsrn(usrn);
+         /*   testusnunivocity_count = userDao.checkUsrn(usrn);
             if (testusnunivocity_count > 0) {
                 testusnunivocity = false;
                 request.getSession().setAttribute("usnError", "The usn already exists");
+            } */
+        	if (userDao.checkUsrn(usrn) > 0) {
+                ctx.setVariable("usnError", "Username already exists");
+                errorDetected = true;
             }
 
         } catch (SQLException e) {
@@ -97,13 +123,14 @@ public class Registration extends HttpServlet {
             return;
         }
 
-        if (testpwd && testemail && testusnunivocity) {
+        if (!errorDetected) {
             try {
                 new_user.setEmail(email);
                 new_user.setPassword(pwd1);
                 new_user.setUsername(usrn);
                 new_user.setReg_Date(currentDateTime);
                 userDao.registerUser(new_user);
+                path = "/index.html"; // Redirect to login page after successful registration
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().println("Registration successful");
             } catch (SQLException e) {
@@ -113,9 +140,8 @@ public class Registration extends HttpServlet {
             }
 
             response.sendRedirect(getServletContext().getContextPath() + "/GoToHomePage");
-        } else {
-            response.sendRedirect(getServletContext().getContextPath() + "/Registration.html");
-        }
+        } 
+        templateEngine.process(path, ctx, response.getWriter());
 
     }
     
