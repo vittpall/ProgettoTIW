@@ -101,7 +101,7 @@ public class CreateAlbum extends HttpServlet {
             response.getWriter().println("Album created successfully");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Internal server error while creating album");
+            response.getWriter().println("Internal server error while creating album"+ e.getMessage());
         }
         
         

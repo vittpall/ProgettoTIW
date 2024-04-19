@@ -58,14 +58,15 @@ input[type="password"] {
 }
 
 /* Error messages */
+/*
 p[th\\:text] {
     color: #d9534f;
     background-color: #ffd2d2;
     padding: 5px;
     border-radius: 4px;
     font-size: 0.8rem;
-    display: none; /* Initially hide, shown if there's an error */
-}
+    display: none; /* Initially hide, shown if there's an error 
+} */
 
 /* Adding subtle transitions for inputs */
 input[type="text"]:focus,
