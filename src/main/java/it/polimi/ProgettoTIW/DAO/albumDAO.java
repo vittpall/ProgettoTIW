@@ -54,12 +54,13 @@ public class albumDAO {
     //contain_images n-n
     public void AddImagesToAlbum (int images_id, int User_id, String title) throws SQLException
     {
-    	String query = "INSERT INTO Contains_Images (User_Id, title, Image_Id) VALUES (?,?,?)";
+    	String query = "INSERT INTO Contains_Images (Image_Id, title, User_Id ) VALUES (?,?,?)";
     	try(PreparedStatement pstatement = con.prepareStatement(query);)
     	{
     		pstatement.setInt(1, images_id);
     		pstatement.setString(2, title);
     		pstatement.setInt(3, User_id);
+    		pstatement.executeUpdate();
     	}
     }
 

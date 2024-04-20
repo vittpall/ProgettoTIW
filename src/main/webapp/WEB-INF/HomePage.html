@@ -18,11 +18,11 @@
     </div>
     
     <h2>Others' Albums</h2>
-<div th:each="entry : ${OtherUserAlbums}">
+<div th:each="entry : ${OtherUserAlbum}">
     <h3 th:text="${entry.key.username} + '\'s Albums'"></h3>
     <ul>
         <li th:each="album : ${entry.value}">
-            <a th:href="@{/GoToAlbumPage(albumTitle=${album.title})}" th:text="${album.title}"></a>
+            <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title})}" th:text="${album.Title}"></a>
         </li>
     </ul>
 </div>
@@ -33,16 +33,16 @@
         <h2>Album Creation form</h2>
         <form th:action="@{/CreateAlbum}" method="post" enctype="multipart/form-data">
             
-            <input name="title" type="text" required>
+            <input name="title" type="text" required placeholder="Enter album title">
             
             <select name="selectedImage">
                <option value="">Select an Image</option>
-               <option th:each="image : ${ImagesUser}" th:value="${image.id}" th:text="${image.title}"></option>
+               <option th:each="image : ${ImagesUser}" th:value="${image.image_Id}" th:text="${image.title}"></option>
             </select>
             
             
-            <input type="text" name="image_title">
-            <input type="text" name="description">
+            <input type="text" name="image_title" placeholder="Enter image title">
+            <input type="text" name="description" placeholder="Enter image description">
             <!-- File input for uploading new image -->
             <input type="file" name="file">
         

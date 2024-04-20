@@ -1,1 +1,2 @@
-SELECT * FROM TIW_Project.User;ù
+DELETE FROM Album WHERE User_id > 0;
+

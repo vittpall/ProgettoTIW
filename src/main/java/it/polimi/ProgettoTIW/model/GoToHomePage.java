@@ -96,19 +96,7 @@ public class GoToHomePage extends HttpServlet {
         Map<User, List<Album>> OtherUserAlbum = new HashMap<>();
         
         try {
-        	/*
-        	UserList = userDao.getAllUsers();
-        	//this call throws the SQLException, probably it's due to the query syntax
-        	imagesUser = imageDao.RetrieveAllImagesByUser(user);
-        	UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
-            for(User u : UserList)
-            {
-            	
-            	//find all the albums and add them to OtherAlbum except when they refer to the user of the session 
-            	if(!u.getUsername().equals(user.getUsername()))
-            		OtherUserAlbum.add(albumDao.findAlbumsByUser(u.getUsername()));
-            } 
-            */
+        	
         	UserList = userDao.getAllUsers();
             imagesUser = imageDao.RetrieveAllImagesByUser(user);
             UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
@@ -116,6 +104,7 @@ public class GoToHomePage extends HttpServlet {
                 if (!u.getUsername().equals(user.getUsername())) {
                     List<Album> albums = albumDao.findAlbumsByUser(u.getUsername());
                     OtherUserAlbum.put(u, albums);
+                    System.out.println("User: " + u.getUsername() + " Albums: " + albums.size()); // Debug statement
                 }
             }
         } catch (SQLException e) {

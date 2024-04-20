@@ -1,1 +1,3 @@
-SELECT * FROM IdIdIdUsernameUser;
+SELECT * FROM User;
+SELECT * FROM Album;
+SELECT * FROM Image;
