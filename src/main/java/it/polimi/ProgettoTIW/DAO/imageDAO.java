@@ -45,7 +45,9 @@ public class imageDAO {
             pstatement.setString(1, image.getTitle());
             pstatement.setString(2, image.getDescription());
             pstatement.setString(3, image.getSystem_Path()); 
-            pstatement.setDate(4, (java.sql.Date)image.getCreation_Date());
+         // Convert java.util.Date to java.sql.Date
+            java.sql.Date sqlDate = new java.sql.Date(image.getCreation_Date().getTime());
+            pstatement.setDate(4, sqlDate);
             pstatement.executeUpdate();
         }
     }

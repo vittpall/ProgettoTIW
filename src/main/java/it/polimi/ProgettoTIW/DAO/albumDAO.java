@@ -1,7 +1,7 @@
 package it.polimi.ProgettoTIW.DAO;
 
 import java.sql.Connection;
-import java.sql.Date;
+//import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,7 +38,7 @@ public class albumDAO {
     }
     
     public void createAlbum(Album album) throws SQLException {
-        String query = "INSERT INTO `Album` (Title, User_id, Creation_Date) VALUES (?, ?, ?)";
+        String query = "INSERT INTO `Album` (Title, User_id, Creation_Date, Username) VALUES (?, ?, ?,?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, album.getTitle());
             pstatement.setInt(2, album.getUser_id());
@@ -46,6 +46,7 @@ public class albumDAO {
          // Convert java.util.Date to java.sql.Date
             java.sql.Date sqlDate = new java.sql.Date(album.getCreation_Date().getTime());
             pstatement.setDate(3, sqlDate);
+            pstatement.setString(4, album.getUsername());
             pstatement.executeUpdate();
         }
     }

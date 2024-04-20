@@ -95,6 +95,7 @@ public class CreateAlbum extends HttpServlet {
             album.setTitle(title);
             album.setUser_id(user.getId());
             album.setCreation_Date(new Date());
+            album.setUsername(user.getUsername());
             albumDao.createAlbum(album);
 
             response.setStatus(HttpServletResponse.SC_OK);
@@ -106,7 +107,7 @@ public class CreateAlbum extends HttpServlet {
         
         
         String[] images_id = request.getParameterValues("selectedImages");
-        
+        /*
         int[] images_id_parsed = new int[images_id.length];
         
         // Convert each string element to an integer and store it in the int array
@@ -138,7 +139,22 @@ public class CreateAlbum extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Internal server error while adding images to the album");
         	}
-        }
+        } */
+        if (images_id != null && images_id.length > 0) {
+            try {
+                for (String imageId : images_id) {
+                    int id = Integer.parseInt(imageId);
+                    albumDao.AddImagesToAlbum(id, user.getId(), title);
+                }
+             //   response.getWriter().append(" and images added successfully");
+            } catch (NumberFormatException e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().println("Invalid image IDs");
+            } catch (SQLException e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("Error adding images to album: " + e.getMessage());
+            }
+        } 
         
         
         Part filePart = request.getPart("file");

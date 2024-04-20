@@ -39,4 +39,7 @@ public class Album {
     public String getTitle() {
         return Title;
     }
+    public String getUsername() {
+    	return Username;
+    }
 }
