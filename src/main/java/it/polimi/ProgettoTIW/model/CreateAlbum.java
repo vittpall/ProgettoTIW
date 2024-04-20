@@ -49,7 +49,7 @@ public class CreateAlbum extends HttpServlet {
             String password = context.getInitParameter("dbPassword");
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
-            folderPath = getServletContext().getInitParameter("outputpath");
+            folderPath = context.getRealPath("/");
         } catch (ClassNotFoundException | SQLException e) {
             throw new UnavailableException("Cannot load database driver or establish connection: " + e.getMessage());
         }
@@ -115,16 +115,22 @@ public class CreateAlbum extends HttpServlet {
 
     private String getUniqueFilePath(String folderPath, String fileName) {
         long timestamp = System.currentTimeMillis();
-        return folderPath + timestamp + "_" + fileName;
+        return folderPath +'/'+ timestamp + "_" + fileName;
     }
 
     private void storeImageDetails(Part filePart, String fileName, String path, String title, int userId)
             throws ServletException {
+    	long timestamp = System.currentTimeMillis();
         imageDAO imageDao = new imageDAO(connection);
         Image image = new Image();
         image.setCreation_Date(new Date());
         image.setTitle(fileName);
         image.setSystem_Path(path);
+        image.setSystem_Path("/imaged/" +timestamp+ fileName);
+        //String contextPath = getServletContext().getContextPath();
+        //image.setSystem_Path(contextPath + "/css/" + fileName);
+        
+        System.out.println(image.getSystem_Path());
         image.setDescription(filePart.getContentType()); // Example usage, replace with actual description if available
 
         try {

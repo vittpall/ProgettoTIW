@@ -104,7 +104,7 @@ public class GoToHomePage extends HttpServlet {
                 if (!u.getUsername().equals(user.getUsername())) {
                     List<Album> albums = albumDao.findAlbumsByUser(u.getUsername());
                     OtherUserAlbum.put(u, albums);
-                    System.out.println("User: " + u.getUsername() + " Albums: " + albums.size()); // Debug statement
+                  //  System.out.println("User: " + u.getUsername() + " Albums: " + albums.size()); // Debug statement
                 }
             }
         } catch (SQLException e) {

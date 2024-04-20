@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -9,10 +9,11 @@
 	<h1>User Images</h1>
 
     <div th:each="image, iterStat : ${images}" th:if="${iterStat.index} &lt; 5">
-        <a th:href="@{/GoToImagePage(imageId=${image.Image_Id})}">
-            <img th:src="${image.System_Path}" alt="Image Thumbnail" width="150" height="150" />
-            <p th:text="${image.Title}"></p>
+        <a th:href="@{/GoToImagePage(imageId=${image.Image_id})}">
+            <img th:src="${'/imaged/' + image.System_Path}" alt="Image Thumbnail" width="250" height="250" />
+            
         </a>
+        <p th:text="${image.Title}"></p>
     </div>
 	
 	<div th:if="${AvailableNext}">
@@ -21,8 +22,8 @@
 	<div th:if="${AvailablePrev}">
 		<a th:href="@{/GoToAlbumPage(Prev=true)}">Prev</a>
 	</div>
-	<a href="@{/GoToHomePage}">Home Page</a>
-	<a href="@{/Logout}">Logout</a>
+	<a th:href="@{/GoToHomePage}">Home Page</a>
+	<a th:href="@{/Logout}">Logout</a>
 	
 
 </body>

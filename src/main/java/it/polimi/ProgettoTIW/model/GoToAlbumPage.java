@@ -25,7 +25,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/Album")
+@WebServlet("/GoToAlbumPage")
 public class GoToAlbumPage extends HttpServlet {
 	
     private static final long serialVersionUID = 1L;
@@ -90,9 +90,10 @@ public class GoToAlbumPage extends HttpServlet {
         try {
         	
             images = imageDao.findImagesByAlbum(AlbumTitle, Offset);
+            System.out.println(images.size());
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Internal server error while retrieving album data");
+            response.getWriter().println("Internal server error while retrieving album data: "+ e.getMessage());
             return;
         }
 
@@ -117,12 +118,12 @@ public class GoToAlbumPage extends HttpServlet {
         	}
         }
         
-		String path = getServletContext().getContextPath() + "/AlbumPage.html";
+		String path = "/WEB-INF/AlbumPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("AvailableNext", AvailableNext);
 		ctx.setVariable("AvailablePrev", AvailablePrev);
-		ctx.setVariable("ImagesToShow", images);
+		ctx.setVariable("images", images);
 		templateEngine.process(path, ctx, response.getWriter());
             
     }
