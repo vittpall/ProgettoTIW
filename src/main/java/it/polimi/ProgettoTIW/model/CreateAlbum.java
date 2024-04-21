@@ -57,6 +57,8 @@ public class CreateAlbum extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+		String path = getServletContext().getContextPath() + "/GoToHomePage";
 
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
@@ -80,14 +82,30 @@ public class CreateAlbum extends HttpServlet {
             album.setUsername(user.getUsername());
             albumDAO albumDao = new albumDAO(connection);
             albumDao.createAlbum(album);
-            response.getWriter().println("Album created successfully");
+            System.out.println("Album created");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error while creating album: " + e.getMessage());
             return;
         }
 
-        handleImageUpload(request, response, user, title);
+        try
+        {
+        	handleImageUpload(request, response, user, title);
+        	response.sendRedirect(path);
+        }
+        catch(ServletException e1)
+        {
+        	e1.printStackTrace();
+        	response.sendError(HttpServletResponse.SC_CONFLICT, "An error occurs");
+        }
+        catch(IOException e2)
+        {
+        	response.sendError(HttpServletResponse.SC_CONFLICT, "An error occurs while uploading the file");
+        }
+        
+        
+        
     }
 
     private void handleImageUpload(HttpServletRequest request, HttpServletResponse response, User user, String title)
@@ -120,13 +138,11 @@ public class CreateAlbum extends HttpServlet {
 
     private void storeImageDetails(Part filePart, String fileName, String path, String title, int userId)
             throws ServletException {
-    	long timestamp = System.currentTimeMillis();
         imageDAO imageDao = new imageDAO(connection);
         Image image = new Image();
         image.setCreation_Date(new Date());
         image.setTitle(fileName);
         image.setSystem_Path(path);
-        image.setSystem_Path("/imaged/" +timestamp+ fileName);
         //String contextPath = getServletContext().getContextPath();
         //image.setSystem_Path(contextPath + "/css/" + fileName);
         
@@ -135,7 +151,7 @@ public class CreateAlbum extends HttpServlet {
 
         try {
             imageDao.addImage(image);
-            int imageId = imageDao.RetrieveNextImageId() - 1; // Assume last added image's ID
+            int imageId = imageDao.RetrieveNextImageId(); // Assume last added image's ID
             imageDao.AddImagesToAlbum(imageId, userId, title);
         } catch (SQLException e) {
             throw new ServletException("Error while storing image details or linking image to album: " + e.getMessage(),e);
