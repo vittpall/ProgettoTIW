@@ -9,15 +9,15 @@
     <!-- Display image details if the image object is not null -->
     <div th:if="${image != null}">
         <!-- Displaying the image at its natural size -->
-        <img th:src="@{${image.systemPath}}" style="max-width: 100%;" th:alt="${image.title}" />
-        <h2 th:text="${image.title}">Image Title</h2>
-        <p th:text="${image.description}">Description</p>
+        <img th:src="@{${image.System_Path}}" style="max-width: 100%;" th:alt="${image.Title}" />
+        <h2 th:text="${image.Title}">Image Title</h2>
+        <p th:text="${image.Description}">Description</p>
 
         <!-- Comments Section -->
         <div>
             <h3>Comments</h3>
             <div th:each="comment : ${comments}">
-                <p th:text="${comment.authorName + ': ' + comment.text}">Comment</p>
+                <p th:text="${comment.user_id + ': ' + comment.Text}">Comment</p>
             </div>
         </div>
 
@@ -25,16 +25,16 @@
         <div>
             <h3>Add a Comment</h3>
             <form th:action="@{/AddComment}" method="post">
-                <input type="hidden" name="imageId" th:value="${image.id}" />
+                <input type="hidden" name="imageId" th:value="${image.Image_id}" />
                 <textarea name="comment" required placeholder="Write your comment here..."></textarea>
                 <button type="submit">Submit Comment</button>
             </form>
         </div>
 
         <!-- Remove image form, only visible to the image owner -->
-        <div th:if="${session.user.id == userCreator}">
-            <form th:action="@{/RemoveImage}" method="post">
-                <input type="hidden" name="imageId" th:value="${image.id}" />
+        <div th:if="${session.user.Id == userCreator}">
+            <form th:action="@{/AddComment}" method="post">
+                <input type="hidden" name="imageId" th:value="${image.Image_id}" />
                 <button type="submit">Remove Image and Comments</button>
             </form>
         </div>

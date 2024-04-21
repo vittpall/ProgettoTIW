@@ -87,7 +87,7 @@ public class imageDAO {
 	}
 	
 	public Image findImageById(int imageId) throws SQLException {
-        String query = "SELECT Image_id, Title, path, creation_date, Description FROM `Image` WHERE id = ?";
+        String query = "SELECT Image_id, Title, System_Path, Creation_Date, Description FROM `Image` WHERE Image_id = ?";
         Image image = null;
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, imageId);
@@ -96,8 +96,8 @@ public class imageDAO {
                     image = new Image();
                     image.setImage_Id(result.getInt("Image_id"));
                     image.setTitle(result.getString("Title"));
-                    image.setSystem_Path(result.getString("path"));
-                    image.setCreation_Date(result.getDate("creation_date"));
+                    image.setSystem_Path(result.getString("System_Path"));
+                    image.setCreation_Date(result.getDate("Creation_Date"));
                     image.setDescription(result.getString("Description"));
                 }
             }
@@ -107,7 +107,7 @@ public class imageDAO {
 	
 	public int CheckCreator(int imageId) throws SQLException
 	{
-		String query = "SELECT UserId FROM Contain_image as C, Images as I WHERE C.ImageId = I.ImageID";
+		String query = "SELECT User_Id FROM Contains_Images as C, Image as I WHERE C.Image_Id = I.Image_id";
 		int user_id = 0;
 		try(PreparedStatement pstatement = con.prepareStatement(query))
 		{
@@ -115,7 +115,7 @@ public class imageDAO {
 			{
 				if(result.next())
 				{
-					user_id = result.getInt("Image_id");
+					user_id = result.getInt("User_Id");
 				}
 			}
 		}

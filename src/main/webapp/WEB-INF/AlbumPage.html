@@ -9,7 +9,7 @@
 	<h1>User Images</h1>
 
     <div th:each="image, iterStat : ${images}" th:if="${iterStat.index} &lt; 5">
-        <a th:href="@{/GoToImagePage(imageId=${image.Image_id})}">
+        <a th:href="@{/GoToImagePage(Image_id=${image.Image_id})}">
             <img th:src="${'/imaged/' + image.System_Path}" alt="Image Thumbnail" width="250" height="250" />
             
         </a>

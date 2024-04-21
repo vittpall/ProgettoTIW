@@ -85,7 +85,7 @@ public class AddComment extends HttpServlet {
             response.getWriter().println("Comment added successfully");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Error while adding comment");
+            response.getWriter().println("Error while adding comment: " + e.getMessage());
         }
     }
     
@@ -116,7 +116,7 @@ public class AddComment extends HttpServlet {
 			imageCreator = imageDao.CheckCreator(imageId);
 		} catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Error while removing comment");
+            response.getWriter().println("Error while removing comment: " + e.getMessage());
 		}
     	
     	if(user.getId() != imageCreator)

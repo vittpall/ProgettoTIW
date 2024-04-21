@@ -25,7 +25,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/ImageDetails")
+@WebServlet("/GoToImagePage")
 public class GoToImage extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -59,10 +59,11 @@ public class GoToImage extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String imageIdParam = request.getParameter("Image_Id");
+        String imageIdParam = request.getParameter("Image_id");
         
         if (imageIdParam == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Image ID is required");
+            
             return;
         }
 
@@ -96,7 +97,7 @@ public class GoToImage extends HttpServlet {
             comments = commentsDao.findCommentsByImage(imageId);
             userCreator = imageDao.CheckCreator(image.getImage_Id());
             
-            String path = getServletContext().getContextPath() + "/ImagePage.html";
+            String path = "/WEB-INF//ImagePage.html";
     		ServletContext servletContext = getServletContext();
             WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
             ctx.setVariable("userCreator", userCreator);
@@ -107,7 +108,7 @@ public class GoToImage extends HttpServlet {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database access error");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database access error: " + e.getMessage());
         }
     }
 

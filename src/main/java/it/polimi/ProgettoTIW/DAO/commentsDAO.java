@@ -35,12 +35,14 @@ public class commentsDAO {
     }
 
     public void addComment(Comment comment) throws SQLException {
-        String query = "INSERT INTO `Comment` (Text, Id, Image_Id, Publication_date) VALUES (?, ?, ?)";
+        String query = "INSERT INTO `Comment` (Text, Id, Image_Id, Publication_date) VALUES (?, ?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, comment.getText());
             pstatement.setInt(2, comment.getUser_id());
             pstatement.setInt(3, comment.getImage_id());
-            pstatement.setDate(4, (java.sql.Date) comment.getPublication_date());
+          //  pstatement.setDate(4, (java.sql.Date) comment.getPublication_date());
+            java.sql.Date sqlDate = new java.sql.Date(comment.getPublication_date().getTime());
+            pstatement.setDate(4, sqlDate);
             pstatement.executeUpdate();
         }
     }
