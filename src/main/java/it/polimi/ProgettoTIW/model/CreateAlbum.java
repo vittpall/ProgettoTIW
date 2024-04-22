@@ -209,8 +209,9 @@ public class CreateAlbum extends HttpServlet {
         image.setDescription(filePart.getContentType()); // Example usage, replace with actual description if available
 
         try {
-            imageDao.addImage(image);
             int imageId = imageDao.RetrieveNextImageId();
+            imageDao.addImage(image);
+            System.out.println("next image id" + imageId);
             imageDao.AddImagesToAlbum(imageId, userId, title);
         } catch (SQLException e) {
             throw new ServletException("Error while storing image details or linking image to album: " + e.getMessage(),e);

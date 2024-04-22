@@ -87,8 +87,7 @@ public class GoToAlbumPage extends HttpServlet {
         imageDAO imageDao = new imageDAO(connection);
         List<Image> images;
 
-        try {
-        	
+        try { 	
             images = imageDao.findImagesByAlbum(AlbumTitle, Offset);
             System.out.println(images.size());
         } catch (SQLException e) {
@@ -124,6 +123,7 @@ public class GoToAlbumPage extends HttpServlet {
 		ctx.setVariable("AvailableNext", AvailableNext);
 		ctx.setVariable("AvailablePrev", AvailablePrev);
 		ctx.setVariable("images", images);
+		ctx.setVariable("albumTitle", AlbumTitle);
 		templateEngine.process(path, ctx, response.getWriter());
             
     }

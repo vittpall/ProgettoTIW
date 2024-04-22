@@ -36,7 +36,7 @@
             
             <select name="selectedImages">
                <option value="">Select an Image</option>
-               <option th:each="image : ${ImagesUser}" th:value="${image.image_Id}" th:text="${image.title}"></option>
+               <option th:type = "checkbox" th:each="image : ${ImagesUser}" th:value="${image.image_Id}" th:text="${image.title}"></option>
             </select>
             
             
