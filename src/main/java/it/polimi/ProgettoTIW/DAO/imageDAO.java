@@ -52,6 +52,7 @@ public class imageDAO {
         }
     }
 
+    /*
     public void updateImage(Image image) throws SQLException {
         String query = "UPDATE `Image` SET Title = ?, path = ? WHERE Image_Id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -61,6 +62,7 @@ public class imageDAO {
             pstatement.executeUpdate();
         }
     }
+    */
 
     public void deleteImage(int imageId) throws SQLException {
         String query = "DELETE FROM `Image` WHERE Image_id = ?";
@@ -87,7 +89,7 @@ public class imageDAO {
 	}
 	
 	public Image findImageById(int imageId) throws SQLException {
-        String query = "SELECT Image_id, Title, System_Path, Creation_Date, Description FROM `Image` WHERE Image_id = ?";
+        String query = "SELECT * FROM `Image` WHERE Image_id = ?";
         Image image = null;
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, imageId);
@@ -143,6 +145,8 @@ public class imageDAO {
         }
         return images;
 	}
+	
+	
 	public void AddImagesToAlbum(int imageId, int userId, String title) throws SQLException {
         String query = "INSERT INTO Contains_Images (Image_Id, title, User_Id) VALUES (?, ?, ?)";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
@@ -152,4 +156,5 @@ public class imageDAO {
             pstatement.executeUpdate();
         }
     }
+    
 }

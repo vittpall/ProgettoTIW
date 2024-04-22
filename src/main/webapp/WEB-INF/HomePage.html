@@ -27,7 +27,6 @@
     </ul>
 </div>
     
-    <!-- Test -->
     
     <div>
         <h2>Album Creation form</h2>
@@ -35,7 +34,7 @@
             
             <input name="title" type="text" required placeholder="Enter album title">
             
-            <select name="selectedImage">
+            <select name="selectedImages">
                <option value="">Select an Image</option>
                <option th:each="image : ${ImagesUser}" th:value="${image.image_Id}" th:text="${image.title}"></option>
             </select>

@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.mysql.cj.protocol.a.NativeConstants.IntegerDataType;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -49,7 +51,7 @@ public class CreateAlbum extends HttpServlet {
             String password = context.getInitParameter("dbPassword");
             Class.forName(driver);
             connection = DriverManager.getConnection(url, user, password);
-            folderPath = context.getRealPath("/");
+            folderPath = context.getInitParameter("outputpath");
         } catch (ClassNotFoundException | SQLException e) {
             throw new UnavailableException("Cannot load database driver or establish connection: " + e.getMessage());
         }
@@ -59,6 +61,7 @@ public class CreateAlbum extends HttpServlet {
             throws ServletException, IOException {
     	
 		String path = getServletContext().getContextPath() + "/GoToHomePage";
+		String[] selectedImages = request.getParameterValues("selectedImages");
 
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
@@ -73,7 +76,40 @@ public class CreateAlbum extends HttpServlet {
             response.getWriter().println("Album title cannot be empty");
             return;
         }
+        
+        int[] Images_Id = new int[selectedImages.length];
+        
+       /*
+        try {
+	        int i;
+		        for(i = 0; i < Images_Id.length; i++);
+		        {
+					Images_Id[i] = Integer.parseInt(selectedImages[i]);
+		        }
+        }
+        catch (NumberFormatException e)
+        {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("An error occurs while parsing the selected images vector" + e.getMessage());
+            return;
+        }
+      
+        
+        try
+        {
+        	imageDAO imageDao = new imageDAO(connection);
+        	for(int i = 0; i < Images_Id.length; i++)
+        	{
+        		Image ImageToAdd = imageDao.findImageById(Images_Id[i]);
+        		imageDao.AddImagesToAlbum(ImageToAdd.getImage_Id(), user.getId(), title);
+        	}
 
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Error while creating album: " + e.getMessage());
+            return;
+        }
+*/
         try {
             Album album = new Album();
             album.setTitle(title);
@@ -88,7 +124,23 @@ public class CreateAlbum extends HttpServlet {
             response.getWriter().println("Error while creating album: " + e.getMessage());
             return;
         }
+        /*
+        try
+        {
+        	imageDAO imageDao = new imageDAO(connection);
+        	for(int selectedImageId : Images_Id)
+        	{
+        		Image ImageToAdd = imageDao.findImageById(selectedImageId);
+        		imageDao.AddImagesToAlbum(ImageToAdd.getImage_Id(), user.getId(), title);
+        	}
 
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Error while adding the photos to the album: " + e.getMessage());
+            return;
+        }
+        */
+        
         try
         {
         	handleImageUpload(request, response, user, title);
@@ -97,11 +149,7 @@ public class CreateAlbum extends HttpServlet {
         catch(ServletException e1)
         {
         	e1.printStackTrace();
-        	response.sendError(HttpServletResponse.SC_CONFLICT, "An error occurs");
-        }
-        catch(IOException e2)
-        {
-        	response.sendError(HttpServletResponse.SC_CONFLICT, "An error occurs while uploading the file");
+        	response.sendError(HttpServletResponse.SC_CONFLICT, "Error while adding the uploaded photo to the album");
         }
         
         
@@ -112,28 +160,39 @@ public class CreateAlbum extends HttpServlet {
             throws ServletException, IOException {
         Part filePart = request.getPart("file");
         if (filePart != null && filePart.getSize() > 0) {
+        	
+    		String contentType = filePart.getContentType();
+    		System.out.println("Type " + contentType);
+
+    		if (!contentType.startsWith("image")) {
+    			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "File format not permitted");
+    			return;
+    		}
+    		
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
             String outputPath = getUniqueFilePath(folderPath, fileName);
             File file = new File(outputPath);
-            if (!file.exists()) {
+            
+            if (!file.exists()) {	
                 try (InputStream fileContent = filePart.getInputStream()) {
-                    Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                	//cannot replace already existing file due to the previous if 
+                    Files.copy(fileContent, file.toPath());
                     storeImageDetails(filePart, fileName, outputPath, title, user.getId());
                    // response.sendRedirect("ShowImage?filename=" + fileName);
                 } catch (IOException e) {
                     throw new ServletException("Error while saving file: " + e.getMessage(), e);
                 }
-            } else {
+            } 
+            else 
+            {
                 response.sendError(HttpServletResponse.SC_CONFLICT, "File already exists.");
             }
-        } else {
-            System.out.println("No image uploaded");
-        }
+	    } 
     }
 
     private String getUniqueFilePath(String folderPath, String fileName) {
         long timestamp = System.currentTimeMillis();
-        return folderPath +'/'+ timestamp + "_" + fileName;
+        return folderPath + fileName +'/' + timestamp;
     }
 
     private void storeImageDetails(Part filePart, String fileName, String path, String title, int userId)
@@ -151,7 +210,7 @@ public class CreateAlbum extends HttpServlet {
 
         try {
             imageDao.addImage(image);
-            int imageId = imageDao.RetrieveNextImageId(); // Assume last added image's ID
+            int imageId = imageDao.RetrieveNextImageId();
             imageDao.AddImagesToAlbum(imageId, userId, title);
         } catch (SQLException e) {
             throw new ServletException("Error while storing image details or linking image to album: " + e.getMessage(),e);
