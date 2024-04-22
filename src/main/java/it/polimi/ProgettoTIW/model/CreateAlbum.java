@@ -192,7 +192,7 @@ public class CreateAlbum extends HttpServlet {
 
     private String getUniqueFilePath(String folderPath, String fileName) {
         long timestamp = System.currentTimeMillis();
-        return folderPath + fileName +'/' + timestamp;
+        return folderPath +'/'+ timestamp + "_" + fileName;
     }
 
     private void storeImageDetails(Part filePart, String fileName, String path, String title, int userId)
