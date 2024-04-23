@@ -92,7 +92,7 @@ public class GoToHomePage extends HttpServlet {
         albumDAO albumDao = new albumDAO(connection);
         List<Image> imagesUser = new ArrayList<>();
         List<Album> UserAlbum = new ArrayList<>();
-     //   List<List<Album>> OtherUserAlbum = new ArrayList<>();
+
         Map<User, List<Album>> OtherUserAlbum = new HashMap<>();
         
         try {

@@ -20,18 +20,18 @@ public class imageDAO {
 
     public List<Image> findImagesByAlbum(String albumTitle, int Offset) throws SQLException {
         List<Image> images = new ArrayList<>();
-        String query = "SELECT i.Image_id, i.Title, i.System_Path, i.Creation_Date, i.Description FROM `Image` as i, Contains_Images as c WHERE i.Image_id = c.Image_Id AND c.title = ? LIMIT 6 OFFSET ?";
+        String query = "SELECT i.Image_id, i.Title, i.System_Path, i.Creation_Date, i.Description FROM `Image` i, Contains_Images c WHERE i.Image_id = c.Image_Id AND c.title = ? LIMIT 6 OFFSET ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, albumTitle);
             pstatement.setInt(2, Offset);
             try (ResultSet result = pstatement.executeQuery();) {
                 while (result.next()) {
                     Image image = new Image();
-                    image.setImage_Id(result.getInt("i.Image_id"));
-                    image.setTitle(result.getString("i.Title"));
-                    image.setSystem_Path(result.getString("i.System_Path"));
-                    image.setCreation_Date(result.getDate("i.Creation_Date"));          
-                    image.setDescription(result.getString("i.Description"));
+                    image.setImage_Id(result.getInt("Image_id"));
+                    image.setTitle(result.getString("Title"));
+                    image.setSystem_Path(result.getString("System_Path"));
+                    image.setCreation_Date(result.getDate("Creation_Date"));          
+                    image.setDescription(result.getString("Description"));
                     images.add(image);
                 }
             }
