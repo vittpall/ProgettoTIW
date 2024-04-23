@@ -48,11 +48,12 @@ public class commentsDAO {
     }
 
 
-    public void deleteComment(int imageId) throws SQLException {
+    public void deleteAllComment(int imageId) throws SQLException {
         String query = "DELETE FROM `Comment` WHERE Id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setInt(1, imageId);
             pstatement.executeUpdate();
         }
     }
+
 }

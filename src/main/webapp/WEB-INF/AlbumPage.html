@@ -13,15 +13,16 @@
             <img th:src="${image.System_Path}" alt="Image Thumbnail" width="250" height="250" />
             
         </a>
+
         <p th:text="${image.Title}"></p>
         <p th:text="${image.System_Path}"> 
     </div>
 	
 	<div th:if="${AvailableNext}">
-		<a th:href="@{/GoToAlbumPage(Next=true, albumTitle = ${AlbumTitle})}">Next</a>
+		<a th:href="@{/GoToAlbumPage(Next=true, albumTitle = ${albumTitle})}">Next</a>
 	</div>
 	<div th:if="${AvailablePrev}">
-		<a th:href="@{/GoToAlbumPage(Prev=true, albumTitle = ${AlbumTitle})}">Prev</a>
+		<a th:href="@{/GoToAlbumPage(Prev=true, albumTitle = ${albumTitle})}">Prev</a>
 	</div>
 	<a th:href="@{/GoToHomePage}">Home Page</a>
 	<a th:href="@{/Logout}">Logout</a>

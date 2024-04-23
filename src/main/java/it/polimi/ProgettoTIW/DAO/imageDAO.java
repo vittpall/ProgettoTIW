@@ -156,5 +156,15 @@ public class imageDAO {
             pstatement.executeUpdate();
         }
     }
+	
+	public void DeleteFromAlbum (int imageId, String title) throws SQLException
+	{
+		String query = "DELETE FROM Contains_Images WHERE Image_Id = ? AND title = ?";
+	     try (PreparedStatement pstatement = con.prepareStatement(query)) {
+	            pstatement.setInt(1, imageId);
+	            pstatement.setString(2, title);
+	            pstatement.executeUpdate();
+	     }
+	}
     
 }

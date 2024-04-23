@@ -79,10 +79,9 @@ public class AddComment extends HttpServlet {
             comment.setImage_id(imageId);
             comment.setUser_id(user.getId());
             comment.setPublication_date(new Date());
-            commentDao.addComment(comment);
-            
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println("Comment added successfully");
+            commentDao.addComment(comment); 
+            System.out.println("Comment added succesfully");
+            response.sendRedirect(getServletContext().getContextPath() + "/GoToImage?imageId=imageId");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error while adding comment: " + e.getMessage());
@@ -94,9 +93,12 @@ public class AddComment extends HttpServlet {
     	//consider that i cannot retriever userId from the image id
     	imageDAO imageDao = new imageDAO(connection);
     	commentsDAO commentsDao = new commentsDAO(connection);
+    	String albumTitle = request.getParameter("albumTitle");
+    	
     	int imageCreator = 0;
     	
-        int imageId;
+    	int imageId;
+        
         try {
             imageId = Integer.parseInt(request.getParameter("imageId"));
         } catch (NumberFormatException e) {
@@ -116,7 +118,7 @@ public class AddComment extends HttpServlet {
 			imageCreator = imageDao.CheckCreator(imageId);
 		} catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Error while removing comment: " + e.getMessage());
+            response.getWriter().println("Error adding the comment: " + e.getMessage());
 		}
     	
     	if(user.getId() != imageCreator)
@@ -130,11 +132,11 @@ public class AddComment extends HttpServlet {
     	{
             try {
             	
-            	commentsDao.deleteComment(imageId);
+            	commentsDao.deleteAllComment(imageId);
             	imageDao.deleteImage(imageId);
-                
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.getWriter().println("Comment deleted successfully");
+            	
+            	System.out.println("Comment succesfully deleted");
+            	response.sendRedirect(getServletContext().getContextPath() + "/GoToAlbumPage&albumTitle=albumTitle");
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Error while deleting comment");

@@ -91,35 +91,42 @@ input[type="submit"]:hover {
   background-color: #218838;
 }
 
-/* Logout link styling */
+
+
+/* Styling for logout button */
 a[href$="@{/Logout}"] {
   display: inline-block;
-  margin-top: 20px;
-  padding: 5px 10px;
-  background-color: #d9534f;
-  color: white;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #ffffff; /* Text color */
+  background-color: #d9534f; /* Default background color */
+  border-radius: 5px; /* Rounded corners */
+  border: 1px solid #d43f3a; /* Border color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow */
+  transition: background-color 0.3s ease; /* Smooth transition */
 }
 
+/* Hover effect for logout button */
 a[href$="@{/Logout}"]:hover {
-  background-color: #c9302c;
+  background-color: #c9302c; /* Hover background color */
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Text shadow */
 }
+
 
 
     /* Style for checkbox container */
-    .checkbox-container {
+checkbox-container {
         display: inline-block;
         margin-right: 10px;
     }
 
     /* Style for checkbox input */
-    .checkbox-container input[type="checkbox"] {
+checkbox-container input[type="checkbox"] {
         display: none;
     }
 
     /* Style for custom checkbox */
-    .checkbox-custom {
+checkbox-custom {
         display: inline-block;
         width: 20px;
         height: 20px;
@@ -130,7 +137,7 @@ a[href$="@{/Logout}"]:hover {
     }
 
     /* Style for custom checkbox when checked */
-    .checkbox-custom:checked + .checkbox-label::after {
+checkbox-custom:checked + .checkbox-label::after {
         content: '\2713';
         font-size: 14px;
         color: #fff;
@@ -140,7 +147,7 @@ a[href$="@{/Logout}"]:hover {
     }
 
     /* Style for label */
-    .checkbox-label {
+checkbox-label {
         display: inline-block;
         vertical-align: top;
         cursor: pointer;
