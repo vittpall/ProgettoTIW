@@ -60,6 +60,7 @@ public class GoToImage extends HttpServlet {
             throws ServletException, IOException {
 
         String imageIdParam = request.getParameter("Image_id");
+        String albumTitle = request.getParameter("albumTitle");
         
         if (imageIdParam == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Image ID is required");
@@ -103,6 +104,7 @@ public class GoToImage extends HttpServlet {
             ctx.setVariable("userCreator", userCreator);
             ctx.setVariable("image", image);
             ctx.setVariable("comments", comments);
+            ctx.setVariable("albumTitle", albumTitle);
             templateEngine.process(path, ctx, response.getWriter());
             
 
