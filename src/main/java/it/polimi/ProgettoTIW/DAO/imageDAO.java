@@ -72,7 +72,7 @@ public class imageDAO {
         }
     }
 
-	public int RetrieveNextImageId() throws SQLException {
+	public int RetrieveLastImageId() throws SQLException {
 		int images_id = 0;
 		String query = "SELECT Image_id FROM `Image` ORDER BY Image_id DESC LIMIT 1";
 		try (PreparedStatement pstatement = con.prepareStatement(query);)
@@ -81,7 +81,7 @@ public class imageDAO {
 			{
 				while(result.next())
 				{
-					images_id = result.getInt("Image_id")+1;
+					images_id = result.getInt("Image_id");
 				}
 			}
 		}

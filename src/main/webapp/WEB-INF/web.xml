@@ -23,6 +23,6 @@
   
   <context-param>
     <param-name>outputpath</param-name>
-    <param-value>/Users/vittoriopalladino/Documents/ImagesTIW/</param-value>
+    <param-value>/Users/vittoriopalladino/Documents/RepoLocaleProgettoTIW/ProgettoTIW/Images/</param-value>
   </context-param>
 </web-app>
