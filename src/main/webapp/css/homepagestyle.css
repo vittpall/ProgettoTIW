@@ -105,3 +105,45 @@ a[href$="@{/Logout}"] {
 a[href$="@{/Logout}"]:hover {
   background-color: #c9302c;
 }
+
+
+    /* Style for checkbox container */
+    .checkbox-container {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    /* Style for checkbox input */
+    .checkbox-container input[type="checkbox"] {
+        display: none;
+    }
+
+    /* Style for custom checkbox */
+    .checkbox-custom {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-color: #eee;
+        border-radius: 4px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    /* Style for custom checkbox when checked */
+    .checkbox-custom:checked + .checkbox-label::after {
+        content: '\2713';
+        font-size: 14px;
+        color: #fff;
+        position: absolute;
+        top: 2px;
+        left: 5px;
+    }
+
+    /* Style for label */
+    .checkbox-label {
+        display: inline-block;
+        vertical-align: top;
+        cursor: pointer;
+    }
+
+

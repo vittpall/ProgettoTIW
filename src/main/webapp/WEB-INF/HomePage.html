@@ -17,15 +17,15 @@
         </ul>
     </div>
     
-    <h2>Others' Albums</h2>
-<div th:each="entry : ${OtherUserAlbum}">
-    <h3 th:text="${entry.key.username} + '\'s Albums'"></h3>
-    <ul>
-        <li th:each="album : ${entry.value}">
-            <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title})}" th:text="${album.Title}"></a>
-        </li>
-    </ul>
-</div>
+	    <h2>Others' Albums</h2>
+	<div th:each="entry : ${OtherUserAlbum}">
+	    <h3 th:text="${entry.key.username} + '\'s Albums'"></h3>
+	    <ul>
+	        <li th:each="album : ${entry.value}">
+	            <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title})}" th:text="${album.Title}"></a>
+	        </li>
+	    </ul>
+	</div>
     
     
     <div>
@@ -33,12 +33,13 @@
         <form th:action="@{/CreateAlbum}" method="post" enctype="multipart/form-data">
             
             <input name="title" type="text" required placeholder="Enter album title">
-            
-            <select name="selectedImages">
-               <option value="">Select an Image</option>
-               <option th:type = "checkbox" th:each="image : ${ImagesUser}" th:value="${image.image_Id}" th:text="${image.title}"></option>
-            </select>
-            
+
+		    <div th:each="image : ${ImagesUser}" class="checkbox-container" >
+		        <input type="checkbox" th:value="${image.image_Id}" id="${'image_' + image.image_Id}" name="selectedImages" class="checkbox-custom"/>
+		        <label th:for="${'image_' + image.image_Id}" th:text="${image.title}" class="checkbox-label"></label><br/>
+		    </div>
+
+
             
             <input type="text" name="image_title" placeholder="Enter image title">
             <input type="text" name="description" placeholder="Enter image description">

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+
 
 import it.polimi.ProgettoTIW.beans.Album;
 import it.polimi.ProgettoTIW.beans.Image;
@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import com.mysql.cj.protocol.a.NativeConstants.IntegerDataType;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -77,39 +76,43 @@ public class CreateAlbum extends HttpServlet {
             return;
         }
         
-        int[] Images_Id = new int[selectedImages.length];
         
-       /*
-        try {
-	        int i;
-		        for(i = 0; i < Images_Id.length; i++);
-		        {
-					Images_Id[i] = Integer.parseInt(selectedImages[i]);
-		        }
-        }
-        catch (NumberFormatException e)
+        if(selectedImages != null)
         {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("An error occurs while parsing the selected images vector" + e.getMessage());
-            return;
+            int[] Images_Id = new int[selectedImages.length];
+            try {
+    	        	int i;
+    		        for(i = 0; i < Images_Id.length; i++)
+    		        {
+    					Images_Id[i] = Integer.parseInt(selectedImages[i]);
+    					System.out.println(Images_Id[i]);
+    		        }
+    		        
+              	
+    		        imageDAO imageDao = new imageDAO(connection);
+                	for(i = 0; i < selectedImages.length; i++)
+                	{
+                		Image ImageToAdd = imageDao.findImageById(Images_Id[i]);
+                		imageDao.AddImagesToAlbum(ImageToAdd.getImage_Id(), user.getId(), title);
+                	}
+                	
+            }
+            catch (NumberFormatException e)
+            {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("An error occurs while parsing the selected images vector" + e.getMessage());
+                return;
+            }
+            
+	        catch (SQLException e) {
+	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            response.getWriter().println("Error while creating album: " + e.getMessage());
+	            return;
+	        }
+	       
         }
-      
-        
-        try
-        {
-        	imageDAO imageDao = new imageDAO(connection);
-        	for(int i = 0; i < Images_Id.length; i++)
-        	{
-        		Image ImageToAdd = imageDao.findImageById(Images_Id[i]);
-        		imageDao.AddImagesToAlbum(ImageToAdd.getImage_Id(), user.getId(), title);
-        	}
 
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Error while creating album: " + e.getMessage());
-            return;
-        }
-*/
+
         try {
             Album album = new Album();
             album.setTitle(title);
@@ -124,23 +127,8 @@ public class CreateAlbum extends HttpServlet {
             response.getWriter().println("Error while creating album: " + e.getMessage());
             return;
         }
-        /*
-        try
-        {
-        	imageDAO imageDao = new imageDAO(connection);
-        	for(int selectedImageId : Images_Id)
-        	{
-        		Image ImageToAdd = imageDao.findImageById(selectedImageId);
-        		imageDao.AddImagesToAlbum(ImageToAdd.getImage_Id(), user.getId(), title);
-        	}
 
-        } catch (SQLException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Error while adding the photos to the album: " + e.getMessage());
-            return;
-        }
-        */
-        
+     
         try
         {
         	handleImageUpload(request, response, user, title);

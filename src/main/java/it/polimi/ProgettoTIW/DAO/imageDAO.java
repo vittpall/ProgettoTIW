@@ -128,7 +128,7 @@ public class imageDAO {
 	public List<Image> RetrieveAllImagesByUser(User user) throws SQLException
 	{
         List<Image> images = new ArrayList<>();
-        String query = "SELECT i.Image_id, i.Title, i.Creation_Date, i.Description, i.System_Path FROM Image i INNER JOIN Contains_Images c ON i.Image_id = c.Image_Id  WHERE c.User_Id = ?";
+        String query = "SELECT DISTINCT i.Image_id, i.Title, i.Creation_Date, i.Description, i.System_Path FROM Image i LEFT JOIN Contains_Images c ON i.Image_id = c.Image_Id  WHERE c.User_Id = ?";
         try (PreparedStatement pstatement = con.prepareStatement(query)) {
             pstatement.setInt(1, user.getId());
             try (ResultSet result = pstatement.executeQuery()) {
