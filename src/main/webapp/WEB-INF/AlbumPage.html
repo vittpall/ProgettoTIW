@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Album Images</title>
 </head>
 <body>
 
-	<h1>User Images</h1>
+    <h1>User Images</h1>
 
-    <div th:each="image, iterStat : ${images}" th:if="${iterStat.index} &lt; 5">
-        <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle = ${albumTitle})}">
-            <img th:src="${image.System_Path}" alt="Image Thumbnail" width="250" height="250" />
-            
-        </a>
+    <!-- Image row with up to 5 images -->
+    <div class="image-container">
+        <th:block th:each="image, iterStat : ${images}">
+            <div class="image-cell">
+                <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle=${albumTitle})}">
+                    <img th:src="@{${image.System_Path}}" style="max-width: 150px; max-height: 150px;" th:alt="${image.Title}" />
 
-        <p th:text="${image.Title}"></p>
-        <p th:text="${image.System_Path}"> 
+                    
+                </a>
+            </div>
+        </th:block>
+        <!-- Empty placeholders for missing images if less than 5 images are returned -->
+        <th:block th:each="i : ${#numbers.sequence(images.size(), 4)}">
+            <div class="image-cell"></div>
+        </th:block>
     </div>
-	
-	<div th:if="${AvailableNext}">
-		<a th:href="@{/GoToAlbumPage(Next=true, albumTitle = ${albumTitle})}">Next</a>
-	</div>
-	<div th:if="${AvailablePrev}">
-		<a th:href="@{/GoToAlbumPage(Prev=true, albumTitle = ${albumTitle})}">Prev</a>
-	</div>
-	<a th:href="@{/GoToHomePage}">Home Page</a>
-	<a th:href="@{/Logout}">Logout</a>
-	
+
+    <!-- Navigation Buttons -->
+    <div>
+        <a th:if="${AvailablePrev}" th:href="@{/GoToAlbumPage(Prev=true, albumTitle=${albumTitle})}">Previous</a>
+        <a th:if="${AvailableNext}" th:href="@{/GoToAlbumPage(Next=true, albumTitle=${albumTitle})}">Next</a>
+    </div>
+
+    <a th:href="@{/GoToHomePage}">Home Page</a>
+    <a th:href="@{/Logout}">Logout</a>
 
 </body>
 </html>
