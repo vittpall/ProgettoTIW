@@ -1,3 +1,11 @@
 /build/
 src/main/webapp/WEB-INF/web.xml
 src/main/webapp/WEB-INF/web.xml
+.DS_Store
+src/main/.DS_Store
+src/.DS_Store
+src/main/java/.DS_Store
+src/main/java/it/.DS_Store
+src/main/java/it/polimi/.DS_Store
+src/main/java/it/polimi/ProgettoTIW/.DS_Store
+src/main/webapp/.DS_Store
