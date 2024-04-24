@@ -58,6 +58,8 @@ public class CreateAlbum extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = getServletContext().getContextPath() + "/GoToHomePage";
+        String[] selectedImages = request.getParameterValues("selectedImages");
+        
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -72,6 +74,7 @@ public class CreateAlbum extends HttpServlet {
             return;
         }
 
+        //add images taken from the checkbox
         Album album = new Album();
         album.setTitle(title);
         album.setUser_id(user.getId());
@@ -84,6 +87,41 @@ public class CreateAlbum extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error while creating album: " + e.getMessage());
             return;
+        }
+        
+        if(selectedImages != null)
+        {
+            int[] Images_Id = new int[selectedImages.length];
+            try {
+    	        	int i;
+    		        for(i = 0; i < Images_Id.length; i++)
+    		        {
+    					Images_Id[i] = Integer.parseInt(selectedImages[i]);
+    					System.out.println(Images_Id[i]);
+    		        }
+    		        
+              	
+    		        imageDAO imageDao = new imageDAO(connection);
+                	for(i = 0; i < selectedImages.length; i++)
+                	{
+                		Image ImageToAdd = imageDao.findImageById(Images_Id[i]);
+                		imageDao.AddImagesToAlbum(ImageToAdd.getImage_Id(), user.getId(), title);
+                	}
+                	
+            }
+            catch (NumberFormatException e)
+            {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().println("An error occurs while parsing the selected images vector" + e.getMessage());
+                return;
+            }
+            
+	        catch (SQLException e) {
+	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            response.getWriter().println("Error while creating album: " + e.getMessage());
+	            return;
+	        }
+	       
         }
 
         handleImageUpload(request, response, user, title);

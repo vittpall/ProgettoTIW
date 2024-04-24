@@ -50,6 +50,7 @@ public class AddComment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String commentText = request.getParameter("comment");
+        String albumTitle = request.getParameter("albumTitle");
         int imageId;
         try {
             imageId = Integer.parseInt(request.getParameter("imageId"));
@@ -81,7 +82,7 @@ public class AddComment extends HttpServlet {
             comment.setPublication_date(new Date());
             commentDao.addComment(comment); 
             System.out.println("Comment added succesfully");
-            response.sendRedirect(getServletContext().getContextPath() + "/GoToImage?imageId=imageId");
+            response.sendRedirect(getServletContext().getContextPath() + "/GoToImage?Image_id=imageId&albumTitle=albumTitle");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error while adding comment: " + e.getMessage());
@@ -134,9 +135,10 @@ public class AddComment extends HttpServlet {
             	
             	commentsDao.deleteAllComment(imageId);
             	imageDao.deleteImage(imageId);
+            	imageDao.DeleteFromAlbum(imageId, albumTitle);
             	
             	System.out.println("Comment succesfully deleted");
-            	response.sendRedirect(getServletContext().getContextPath() + "/GoToAlbumPage&albumTitle=albumTitle");
+            	response.sendRedirect(getServletContext().getContextPath() + "/GoToAlbumPage?albumTitle=albumTitle");
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Error while deleting comment");
