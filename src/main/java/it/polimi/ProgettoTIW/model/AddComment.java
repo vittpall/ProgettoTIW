@@ -82,7 +82,7 @@ public class AddComment extends HttpServlet {
             comment.setPublication_date(new Date());
             commentDao.addComment(comment); 
             System.out.println("Comment added succesfully");
-            response.sendRedirect(getServletContext().getContextPath() + "/GoToImage?Image_id=imageId&albumTitle=albumTitle");
+            response.sendRedirect(getServletContext().getContextPath() + "/GoToImagePage?Image_id=imageId&albumTitle=albumTitle");
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error while adding comment: " + e.getMessage());
