@@ -56,7 +56,7 @@ public class AddComment extends HttpServlet {
             imageId = Integer.parseInt(request.getParameter("imageId"));
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().println("Invalid image ID format");
+            response.getWriter().println("Invalid image ID format: " +e.getMessage());
             return;
         }
 
