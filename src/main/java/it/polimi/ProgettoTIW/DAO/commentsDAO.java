@@ -1,13 +1,15 @@
 package it.polimi.ProgettoTIW.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 import it.polimi.ProgettoTIW.beans.Comment;
+
 
 public class commentsDAO {
     private final Connection con;
@@ -26,7 +28,7 @@ public class commentsDAO {
                     Comment comment = new Comment();
                     comment.setUser_id(result.getInt("id"));
                     comment.setText(result.getString("text"));
-                    comment.setPublication_date(new Date());
+                    comment.setPublication_date(result.getDate("Publication_date"));
                     comments.add(comment);
                 }
             }

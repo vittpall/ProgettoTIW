@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import it.polimi.ProgettoTIW.beans.User;
@@ -79,7 +81,21 @@ public class AddComment extends HttpServlet {
             comment.setText(commentText);
             comment.setImage_id(imageId);
             comment.setUser_id(user.getId());
-            comment.setPublication_date(new Date());
+            
+            Date date = new Date(); // Current date and time
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            
+            // Format the date with milliseconds
+            String dateString = dateFormat.format(date);
+
+            try {
+                Date dateComment = dateFormat.parse(dateString);
+                System.out.println("Parsed Date: " + date);
+                comment.setPublication_date(dateComment);
+            } catch (ParseException e) {
+                System.out.println("Error parsing date: " + e.getMessage());
+            }
+           
             commentDao.addComment(comment); 
             System.out.println("Comment added succesfully");
             response.sendRedirect(getServletContext().getContextPath() + "/GoToImagePage?Image_id=imageId&albumTitle=albumTitle");
