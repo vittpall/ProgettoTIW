@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class commentsDAO {
                     Comment comment = new Comment();
                     comment.setUser_id(result.getInt("id"));
                     comment.setText(result.getString("text"));
-                    comment.setPublication_date(result.getDate("Publication_date"));
+                    comment.setPublication_date(result.getTimestamp("Publication_date").toLocalDateTime());
                     comments.add(comment);
                 }
             }
@@ -43,8 +45,7 @@ public class commentsDAO {
             pstatement.setInt(2, comment.getUser_id());
             pstatement.setInt(3, comment.getImage_id());
           //  pstatement.setDate(4, (java.sql.Date) comment.getPublication_date());
-            java.sql.Date sqlDate = new java.sql.Date(comment.getPublication_date().getTime());
-            pstatement.setDate(4, sqlDate);
+            pstatement.setTimestamp(4, Timestamp.valueOf(comment.getPublication_date()));
             pstatement.executeUpdate();
         }
     }

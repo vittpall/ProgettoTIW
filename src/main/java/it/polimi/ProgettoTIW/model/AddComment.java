@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import it.polimi.ProgettoTIW.beans.User;
@@ -53,9 +54,11 @@ public class AddComment extends HttpServlet {
             throws ServletException, IOException {
         String commentText = request.getParameter("comment");
         String albumTitle = request.getParameter("albumTitle");
+        String image_id = request.getParameter("imageId");
+        
         int imageId;
         try {
-            imageId = Integer.parseInt(request.getParameter("imageId"));
+            imageId = Integer.parseInt(image_id);
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().println("Invalid image ID format: " +e.getMessage());
@@ -81,24 +84,12 @@ public class AddComment extends HttpServlet {
             comment.setText(commentText);
             comment.setImage_id(imageId);
             comment.setUser_id(user.getId());
-            
-            Date date = new Date(); // Current date and time
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-            
-            // Format the date with milliseconds
-            String dateString = dateFormat.format(date);
-
-            try {
-                Date dateComment = dateFormat.parse(dateString);
-                System.out.println("Parsed Date: " + date);
-                comment.setPublication_date(dateComment);
-            } catch (ParseException e) {
-                System.out.println("Error parsing date: " + e.getMessage());
-            }
+            comment.setPublication_date(LocalDateTime.now());
+          
            
             commentDao.addComment(comment); 
             System.out.println("Comment added succesfully");
-            response.sendRedirect(getServletContext().getContextPath() + "/GoToImagePage?Image_id=imageId&albumTitle=albumTitle");
+            response.sendRedirect(getServletContext().getContextPath() + "/GoToImagePage?Image_id=" + imageId +"&albumTitle=" + albumTitle);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error while adding comment: " + e.getMessage());
@@ -111,13 +102,14 @@ public class AddComment extends HttpServlet {
     	imageDAO imageDao = new imageDAO(connection);
     	commentsDAO commentsDao = new commentsDAO(connection);
     	String albumTitle = request.getParameter("albumTitle");
+    	String image_id = request.getParameter("imageId");
     	
     	int imageCreator = 0;
     	
     	int imageId;
         
         try {
-            imageId = Integer.parseInt(request.getParameter("imageId"));
+            imageId = Integer.parseInt(image_id);
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().println("Invalid image ID format");
@@ -154,7 +146,7 @@ public class AddComment extends HttpServlet {
             	imageDao.DeleteFromAlbum(imageId, albumTitle);
             	
             	System.out.println("Comment succesfully deleted");
-            	response.sendRedirect(getServletContext().getContextPath() + "/GoToAlbumPage?albumTitle=albumTitle");
+            	response.sendRedirect(getServletContext().getContextPath() + "/GoToAlbumPage?albumTitle=" + albumTitle);
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Error while deleting comment");

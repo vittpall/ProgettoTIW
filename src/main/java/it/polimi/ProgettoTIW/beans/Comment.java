@@ -1,12 +1,13 @@
 package it.polimi.ProgettoTIW.beans;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Comment {
 
     private Integer Image_id;
     private Integer Id;
-    private Date Publication_date;
+    private LocalDateTime Publication_date;
     private String Text;
     
     public void setText(String Text)
@@ -22,8 +23,8 @@ public class Comment {
         this.Image_id = image_id;
     }
 
-    public void setPublication_date(Date publication_date) {
-        this.Publication_date = publication_date;
+    public void setPublication_date(LocalDateTime localDateTime) {
+        this.Publication_date = localDateTime;
     }
 
     public String getText()
@@ -31,7 +32,7 @@ public class Comment {
     	return Text;
     }
     
-    public Date getPublication_date() {
+    public LocalDateTime getPublication_date() {
         return Publication_date;
     }
 

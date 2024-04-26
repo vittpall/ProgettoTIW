@@ -72,7 +72,8 @@ public class GoToImage extends HttpServlet {
         try {
             imageId = Integer.parseInt(imageIdParam);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid image ID format");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Invalid photos format: " + e.getMessage());
             return;
         }
         
