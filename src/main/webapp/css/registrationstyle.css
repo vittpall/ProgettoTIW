@@ -57,6 +57,19 @@ input[type="password"] {
     background-color: #218838;
 }
 
+a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.login-link p {
+    text-align: center; /* Center-align the registration link text */
+}
+
 /* Error messages */
 /*
 p[th\\:text] {

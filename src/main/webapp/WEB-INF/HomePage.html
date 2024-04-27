@@ -12,7 +12,7 @@
         <h2>Your Albums</h2>
         <ul>
             <li th:each="album : ${UserAlbum}">
-                <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title})}" th:text="${album.Title}"></a>
+                <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title}, albumCreator=${album.User_id})}" th:text="${album.Title}"></a>
             </li>
         </ul>
     </div>
@@ -22,7 +22,7 @@
 	    <h3 th:text="${entry.key.username} + '\'s Albums'"></h3>
 	    <ul>
 	        <li th:each="album : ${entry.value}">
-	            <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title})}" th:text="${album.Title}"></a>
+	            <a th:href="@{/GoToAlbumPage(albumTitle=${album.Title}, albumCreator=${album.User_id})}" th:text="${album.Title}"></a>
 	        </li>
 	    </ul>
 	</div>

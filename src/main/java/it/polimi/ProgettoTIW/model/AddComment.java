@@ -146,7 +146,7 @@ public class AddComment extends HttpServlet {
             	imageDao.DeleteFromAlbum(imageId, albumTitle);
             	
             	System.out.println("Comment succesfully deleted");
-            	response.sendRedirect(getServletContext().getContextPath() + "/GoToAlbumPage?albumTitle=" + albumTitle);
+            	response.sendRedirect(getServletContext().getContextPath() + "/GoToAlbumPage?albumTitle=" + albumTitle + "&albumCreator=" + user.getId());
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().println("Error while deleting comment");

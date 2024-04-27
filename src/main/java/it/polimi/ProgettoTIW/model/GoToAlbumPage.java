@@ -66,6 +66,7 @@ public class GoToAlbumPage extends HttpServlet {
             throws ServletException, IOException {
 
     	String AlbumTitle = request.getParameter("albumTitle");
+    	String AlbumCreator = request.getParameter("albumCreator");
     	String NextPage = request.getParameter("Next");
     	String PrevPage = request.getParameter("Prev");
     	boolean AvailableNext = false;
@@ -86,9 +87,18 @@ public class GoToAlbumPage extends HttpServlet {
 
         imageDAO imageDao = new imageDAO(connection);
         List<Image> images;
+        int idAlbumCreator;
+        
+        try {
+            idAlbumCreator = Integer.parseInt(AlbumCreator);
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Invalid id format: " + e.getMessage());
+            return;
+        }
 
         try { 	
-            images = imageDao.findImagesByAlbum(AlbumTitle, Offset);
+            images = imageDao.findImagesByAlbum(AlbumTitle, idAlbumCreator, Offset);
             System.out.println(images.size());
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
