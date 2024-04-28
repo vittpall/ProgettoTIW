@@ -100,6 +100,7 @@ public class GoToHomePage extends HttpServlet {
         	UserList = userDao.getAllUsers();
             imagesUser = imageDao.RetrieveAllImagesByUser(user);
             UserAlbum = albumDao.findAlbumsByUser(user.getUsername());
+            //TODO verify the order of the user inside the userlist, to solve that annoying problem related to refreshing the page
             for (User u : UserList) {
                 if (!u.getUsername().equals(user.getUsername())) {
                     List<Album> albums = albumDao.findAlbumsByUser(u.getUsername());
