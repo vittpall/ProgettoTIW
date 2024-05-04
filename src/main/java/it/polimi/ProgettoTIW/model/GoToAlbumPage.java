@@ -132,6 +132,7 @@ public class GoToAlbumPage extends HttpServlet {
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("AvailableNext", AvailableNext);
 		ctx.setVariable("AvailablePrev", AvailablePrev);
+		ctx.setVariable("AlbumCreator", AlbumCreator);
 		ctx.setVariable("images", images);
 		ctx.setVariable("albumTitle", AlbumTitle);
 		templateEngine.process(path, ctx, response.getWriter());

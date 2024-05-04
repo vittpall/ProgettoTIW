@@ -13,7 +13,7 @@
     <div class="image-container">
         <th:block th:each="image, iterStat : ${images}" th:if="${iterStat.count <= 5}">
             <div class="image-cell">
-                <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle=${albumTitle})}">
+                <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle=${albumTitle}, albumCreator=${AlbumCreator})}">
                     <img th:src="@{${image.System_Path}}" style="max-width: 150px; max-height: 150px;" th:alt="${image.Title}" />
                 </a>
             </div>
