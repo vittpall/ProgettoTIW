@@ -33,6 +33,7 @@ public class CreateAlbum extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private String folderPath = "";
+    private String folderPathToCopyFrom = "";
 
     public void init() throws ServletException {
         try {
@@ -46,6 +47,7 @@ public class CreateAlbum extends HttpServlet {
 
             // Ensure the directory path is properly initialized and accessible
             folderPath = context.getRealPath("/images/");
+            folderPathToCopyFrom = getServletContext().getInitParameter("outputpath");
             File imagesDir = new File(folderPath);
             if (!imagesDir.exists()) {
                 imagesDir.mkdirs();
@@ -135,11 +137,21 @@ public class CreateAlbum extends HttpServlet {
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
             String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
             String outputPath = folderPath + uniqueFileName;
+            String outputPathBackup = folderPathToCopyFrom + uniqueFileName;
             File file = new File(outputPath);
+            File fileBackup = new File(outputPathBackup);
 
             try (InputStream input = filePart.getInputStream()) {
+     //       	Files.createDirectories(Paths.get(outputPath).getParent()); // Ensure parent directories exist
                 Files.copy(input, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 storeImageDetails(fileName, "/images/" + uniqueFileName, title, user.getId());
+            } catch (IOException e) {
+                throw new ServletException("Error while saving file: " + e.getMessage(), e);
+            }
+            
+            try (InputStream input = filePart.getInputStream()) {
+     //       	Files.createDirectories(Paths.get(outputPath).getParent()); // Ensure parent directories exists   
+                Files.copy(input, fileBackup.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new ServletException("Error while saving file: " + e.getMessage(), e);
             }
