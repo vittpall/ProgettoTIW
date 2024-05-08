@@ -100,6 +100,7 @@ public class GoToImage extends HttpServlet {
             comments = commentsDao.findCommentsByImage(imageId);
             userCreator = imageDao.CheckCreator(image.getImage_Id());
             
+            System.out.println("immagine è "+ userCreator);
             String path = "/WEB-INF/ImagePage.html";
     		ServletContext servletContext = getServletContext();
             WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());

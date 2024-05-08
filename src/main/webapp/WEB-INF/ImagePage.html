@@ -27,13 +27,14 @@
             <form th:action="@{/AddComment}" method="post">
                 <input type="hidden" name="imageId" th:value="${image.Image_id}" />
                 <input type="hidden" name="albumTitle" th:value="${albumTitle}" />
+                <input type="hidden" name="albumCreator" th:value=${albumCreator} />
                 <textarea name="comment" required placeholder="Write your comment here..."></textarea>
                 <button type="submit">Submit Comment</button>
             </form>
         </div>
 
         <!-- Remove image form, only visible to the image owner -->
-        <div th:if="${session.user.Id == userCreator}">
+        <div th:if="${session.user.Id == albumCreator}">
             <form th:action="@{/AddComment}" method="get">
             	<input type="hidden" name="imageId" th:value="${image.Image_id}" />
                 <input type="hidden" name="albumTitle" th:value="${albumTitle}" />

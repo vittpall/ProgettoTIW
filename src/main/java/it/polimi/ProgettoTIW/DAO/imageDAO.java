@@ -110,10 +110,11 @@ public class imageDAO {
 	
 	public int CheckCreator(int imageId) throws SQLException
 	{
-		String query = "SELECT User_Id FROM Contains_Images as C, Image as I WHERE C.Image_Id = I.Image_id";
+		String query = "SELECT User_Id FROM Contains_Images as C, Image as I WHERE C.Image_Id = I.Image_id AND C.Image_id = ?";
 		int user_id = 0;
 		try(PreparedStatement pstatement = con.prepareStatement(query))
 		{
+			pstatement.setInt(1, imageId);
 			try(ResultSet result = pstatement.executeQuery())
 			{
 				if(result.next())

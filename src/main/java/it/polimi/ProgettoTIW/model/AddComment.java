@@ -129,6 +129,8 @@ public class AddComment extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error adding the comment: " + e.getMessage());
 		}
+    	System.out.println("imageCreator"+ imageCreator);
+  
     	
     	if(user.getId() != imageCreator)
     	{
