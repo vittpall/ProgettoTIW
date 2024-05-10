@@ -1,6 +1,6 @@
 package it.polimi.ProgettoTIW.beans;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Album {
     //primary key
@@ -9,9 +9,9 @@ public class Album {
     private int User_id;
     private String Title;
 
-    private Date Creation_Date;
+    private LocalDateTime Creation_Date;
 
-    public void setCreation_Date(Date creation_Date) {
+    public void setCreation_Date(LocalDateTime creation_Date) {
         Creation_Date = creation_Date;
     }
 
@@ -32,7 +32,7 @@ public class Album {
         return User_id;
     }
 
-    public Date getCreation_Date() {
+    public LocalDateTime getCreation_Date() {
         return Creation_Date;
     }
 

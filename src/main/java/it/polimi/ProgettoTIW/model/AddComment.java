@@ -55,6 +55,7 @@ public class AddComment extends HttpServlet {
         String commentText = request.getParameter("comment");
         String albumTitle = request.getParameter("albumTitle");
         String image_id = request.getParameter("imageId");
+        String albumCreator = request.getParameter("albumCreator");
         
         int imageId;
         try {
@@ -89,7 +90,7 @@ public class AddComment extends HttpServlet {
            
             commentDao.addComment(comment); 
             System.out.println("Comment added succesfully");
-            response.sendRedirect(getServletContext().getContextPath() + "/GoToImagePage?Image_id=" + imageId +"&albumTitle=" + albumTitle);
+            response.sendRedirect(getServletContext().getContextPath() + "/GoToImagePage?Image_id=" + imageId +"&albumTitle=" + albumTitle + "&albumCreator="+ albumCreator);
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("Error while adding comment: " + e.getMessage());
@@ -136,7 +137,7 @@ public class AddComment extends HttpServlet {
     	{
     		System.out.println("users not authorized to delete the image");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println("User not logged in");
+            response.getWriter().println("User not authorized");
             return;
     	}
     	else

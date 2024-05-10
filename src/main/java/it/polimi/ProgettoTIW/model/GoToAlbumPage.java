@@ -73,13 +73,13 @@ public class GoToAlbumPage extends HttpServlet {
     	boolean AvailablePrev = false;
     	
     	
-    	if(NextPage != null)
+    	if(NextPage != null && NextPage.equals("true"))
     	{
     		this.Offset += 5;
     	}
     	else
     	{
-    		if(PrevPage != null)
+    		if(PrevPage != null && PrevPage.equals("true"))
     		{
     			this.Offset -= 5;
     		}
@@ -93,7 +93,7 @@ public class GoToAlbumPage extends HttpServlet {
             idAlbumCreator = Integer.parseInt(AlbumCreator);
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().println("Invalid id format: " + e.getMessage());
+            response.getWriter().println("Invalid albumCreator id: " + e.getMessage());
             return;
         }
 
@@ -132,7 +132,7 @@ public class GoToAlbumPage extends HttpServlet {
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("AvailableNext", AvailableNext);
 		ctx.setVariable("AvailablePrev", AvailablePrev);
-		ctx.setVariable("AlbumCreator", AlbumCreator);
+		ctx.setVariable("albumCreator", idAlbumCreator );
 		ctx.setVariable("images", images);
 		ctx.setVariable("albumTitle", AlbumTitle);
 		templateEngine.process(path, ctx, response.getWriter());

@@ -25,6 +25,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @WebServlet("/CreateAlbum")
@@ -61,6 +62,8 @@ public class CreateAlbum extends HttpServlet {
             throws ServletException, IOException {
         String path = getServletContext().getContextPath() + "/GoToHomePage";
         String[] selectedImages = request.getParameterValues("selectedImages");
+        String image_title = request.getParameter("image_title");
+        String description = request.getParameter("description");
         
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
@@ -81,7 +84,7 @@ public class CreateAlbum extends HttpServlet {
         album.setTitle(title);
         album.setUser_id(user.getId());
         album.setUsername(user.getUsername());
-        album.setCreation_Date(new Date());
+        album.setCreation_Date(LocalDateTime.now());
         albumDAO albumDao = new albumDAO(connection);
         try {
             albumDao.createAlbum(album);
@@ -126,11 +129,11 @@ public class CreateAlbum extends HttpServlet {
 	       
         }
 
-        handleImageUpload(request, response, user, title);
+        handleImageUpload(request, response, user);
         response.sendRedirect(path);
     }
 
-    private void handleImageUpload(HttpServletRequest request, HttpServletResponse response, User user, String title)
+    private void handleImageUpload(HttpServletRequest request, HttpServletResponse response, User user)
             throws ServletException, IOException {
         Part filePart = request.getPart("file"); // Assume the file input name is "file"
         if (filePart != null && filePart.getSize() > 0) {
@@ -144,7 +147,7 @@ public class CreateAlbum extends HttpServlet {
             try (InputStream input = filePart.getInputStream()) {
      //       	Files.createDirectories(Paths.get(outputPath).getParent()); // Ensure parent directories exist
                 Files.copy(input, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                storeImageDetails(fileName, "/images/" + uniqueFileName, title, user.getId());
+                storeImageDetails(fileName, "/images/" + uniqueFileName, user.getId(), request);
             } catch (IOException e) {
                 throw new ServletException("Error while saving file: " + e.getMessage(), e);
             }
@@ -158,18 +161,21 @@ public class CreateAlbum extends HttpServlet {
         }
     }
 
-    private void storeImageDetails(String fileName, String path, String title, int userId)
+    private void storeImageDetails(String fileName, String path, int userId, HttpServletRequest request)
             throws ServletException {
+        String image_title = request.getParameter("image_title");
+        String description = request.getParameter("description");
         imageDAO imageDao = new imageDAO(connection);
         Image image = new Image();
         image.setCreation_Date(new Date());
-        image.setTitle(fileName);
+        image.setTitle(image_title);
+        image.setDescription(description);
         image.setSystem_Path(path);
 
         try {
             imageDao.addImage(image);
             int imageId = imageDao.RetrieveLastImageId();
-            imageDao.AddImagesToAlbum(imageId, userId, title);
+            imageDao.AddImagesToAlbum(imageId, userId, request.getParameter("title"));
         } catch (SQLException e) {
             throw new ServletException("Error while storing image details or linking image to album: " + e.getMessage(), e);
         }

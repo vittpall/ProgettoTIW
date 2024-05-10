@@ -13,7 +13,7 @@
     <div class="image-container">
         <th:block th:each="image, iterStat : ${images}" th:if="${iterStat.count <= 5}">
             <div class="image-cell">
-                <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle=${albumTitle}, albumCreator=${AlbumCreator})}">
+                <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle=${albumTitle}, albumCreator=${albumCreator})}">
                     <img th:src="@{${image.System_Path}}" style="max-width: 150px; max-height: 150px;" th:alt="${image.Title}" />
                 </a>
             </div>
@@ -26,8 +26,8 @@
 
     <!-- Navigation Buttons -->
     <div>
-        <a th:if="${AvailablePrev}" th:href="@{/GoToAlbumPage(Prev=true, albumTitle=${albumTitle})}">Previous</a>
-        <a th:if="${AvailableNext}" th:href="@{/GoToAlbumPage(Next=true, albumTitle=${albumTitle})}">Next</a>
+        <a th:if="${AvailablePrev}" th:href="@{/GoToAlbumPage(Prev=true, albumTitle=${albumTitle}, albumCreator=${albumCreator})}">Previous</a>
+        <a th:if="${AvailableNext}" th:href="@{/GoToAlbumPage(Next=true, albumTitle=${albumTitle}, albumCreator=${albumCreator})}">Next</a>
     </div>
 
     <a th:href="@{/GoToHomePage}">Home Page</a>
