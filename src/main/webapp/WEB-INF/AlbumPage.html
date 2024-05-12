@@ -9,29 +9,35 @@
 
     <h1>User Images</h1>
 
-    <!-- Image row with up to 5 images -->
-    <div class="image-container">
-        <th:block th:each="image, iterStat : ${images}" th:if="${iterStat.count <= 5}">
-            <div class="image-cell">
-                <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle=${albumTitle}, albumCreator=${albumCreator})}">
-                    <img th:src="@{${image.System_Path}}" style="max-width: 150px; max-height: 150px;" th:alt="${image.Title}" />
-                </a>
+    <div class="main-container">
+        <!-- Combining navigation with image container for inline display -->
+        <div class="gallery-navigation">
+            <!-- Previous button -->
+            <a th:if="${AvailablePrev}" th:href="@{/GoToAlbumPage(Prev=true, albumTitle=${albumTitle}, albumCreator=${albumCreator})}" class="nav-link">Previous</a>
+
+            <!-- Image gallery container -->
+            <div class="image-container">
+                <th:block th:each="image, iterStat : ${images}" th:if="${iterStat.count <= 5}">
+                    <div class="image-cell">
+                        <a th:href="@{/GoToImagePage(Image_id=${image.Image_id}, albumTitle=${albumTitle}, albumCreator=${albumCreator})}">
+                            <img th:src="@{${image.System_Path}}" style="max-width: 150px; max-height: 150px;" th:alt="${image.Title}" />
+                        </a>
+                    </div>
+                </th:block>
+                <th:block th:each="i : ${#numbers.sequence(images.size(), 4)}" th:if="${images.size() < 5}">
+                    <div class="image-cell"></div>
+                </th:block>
             </div>
-        </th:block>
-        <!-- Empty placeholders for missing images if less than 5 images are returned -->
-        <th:block th:each="i : ${#numbers.sequence(images.size(), 4)}" th:if="${images.size() < 5}">
-            <div class="image-cell"></div>
-        </th:block>
+
+            <!-- Next button -->
+            <a th:if="${AvailableNext}" th:href="@{/GoToAlbumPage(Next=true, albumTitle=${albumTitle}, albumCreator=${albumCreator})}" class="nav-link">Next</a>
+        </div>
     </div>
 
-    <!-- Navigation Buttons -->
-    <div>
-        <a th:if="${AvailablePrev}" th:href="@{/GoToAlbumPage(Prev=true, albumTitle=${albumTitle}, albumCreator=${albumCreator})}">Previous</a>
-        <a th:if="${AvailableNext}" th:href="@{/GoToAlbumPage(Next=true, albumTitle=${albumTitle}, albumCreator=${albumCreator})}">Next</a>
-    </div>
-
-    <a th:href="@{/GoToHomePage}">Home Page</a>
-    <a th:href="@{/Logout}">Logout</a>
+    <div class="user-navigation">
+            <a th:href="@{/GoToHomePage}" class="user-link">Home Page</a>
+            <a th:href="@{/Logout}" class="user-link">Logout</a>
+        </div>
 
 </body>
 </html>
