@@ -1,4 +1,3 @@
-/* Base page styles */
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: #f4f4f4;
@@ -16,17 +15,36 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Image container */
+/* Main container for images and navigation */
+.main-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex; /* Ensure the main container is also flex */
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Gallery and navigation container */
+.gallery-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* This ensures that the nav links are on the edges */
+  width: 100%;
+  padding: 0 10px; /* Padding to ensure some space from the container edge */
+  flex-wrap: nowrap; /* Prevent wrapping to keep all items on the same row */
+}
+
 .image-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1; /* Allow the image container to take up available space */
+  overflow-x: auto; /* Adds horizontal scrolling if images exceed the available space */
 }
 
 .image-cell {
-  width: 150px;
+  min-width: 150px; /* Ensures that image cells have a minimum width */
   height: 150px;
   background-color: #fff;
   border-radius: 8px;
@@ -38,47 +56,49 @@ h1 {
 }
 
 .image-cell img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%; /* Ensures images do not exceed their containers */
+  max-height: 100%;
   object-fit: cover;
 }
 
-/* Navigation buttons */
-.navigation {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.navigation a {
+.nav-link {
   padding: 10px 15px;
   text-decoration: none;
   color: #fff;
   background-color: #007bff;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
+  min-width: 80px;
+  text-align: center;
 }
 
-.navigation a:hover {
+.nav-link:hover {
   background-color: #0056b3;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* Adjusting the link styles to be more in line with the button aesthetic */
-a[href$="@{/GoToHomePage}"],
-a[href$="@{/Logout}"] {
-  background-color: #f4f4f4;
-  color: #007bff;
-  border: 2px solid #007bff;
-  margin-top: 30px;
-  transition: all 0.3s ease;
+
+/* Styles for user navigation links */
+.user-navigation {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
-a[href$="@{/GoToHomePage}"]:hover,
-a[href$="@{/Logout}"]:hover {
-  background-color: #007bff;
-  color: #fff;
+.user-link {
+    padding: 12px 20px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
 }
 
+.user-link:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
