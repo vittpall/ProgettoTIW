@@ -1,6 +1,7 @@
 package it.polimi.ProgettoTIW.model;
 
 import it.polimi.ProgettoTIW.DAO.imageDAO;
+import it.polimi.ProgettoTIW.DAO.userDAO;
 import it.polimi.ProgettoTIW.DAO.commentsDAO;
 import it.polimi.ProgettoTIW.beans.Image;
 import it.polimi.ProgettoTIW.beans.User;
@@ -97,6 +98,7 @@ public class GoToImage extends HttpServlet {
 
         imageDAO imageDao = new imageDAO(connection);
         commentsDAO commentsDao = new commentsDAO(connection);
+        userDAO userDao = new userDAO(connection);
         Image image;
         List<Comment> comments;
         int userCreator = 0;
@@ -108,6 +110,11 @@ public class GoToImage extends HttpServlet {
                 return;
             }
             comments = commentsDao.findCommentsByImage(imageId);
+            //i forgot to add username as an attribute of comment
+            for(Comment comment: comments)
+            {
+            	comment.setUsername(userDao.getUsernameById(comment.getUser_id()));
+            }
             userCreator = imageDao.CheckCreator(image.getImage_Id());
             
             System.out.println("immagine è "+ userCreator);

@@ -17,7 +17,7 @@
         <div>
             <h3>Comments</h3>
             <div th:each="comment : ${comments}">
-                <p th:text="${comment.user_id + ': ' + comment.Text}">Comment</p>
+                <p th:text="${comment.username + ': ' + comment.Text}">Comment</p>
             </div>
         </div>
 
