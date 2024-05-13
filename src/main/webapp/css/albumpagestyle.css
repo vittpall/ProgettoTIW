@@ -45,20 +45,30 @@ h1 {
 
 .image-cell {
   min-width: 150px; /* Ensures that image cells have a minimum width */
-  height: 150px;
+  height: 170px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   display: flex;
+  flex-direction: column; /* Changed to column to stack img and span */
   align-items: center;
+  
   justify-content: center;
   overflow: hidden;
+   padding: 5px; 
 }
 
 .image-cell img {
   max-width: 100%; /* Ensures images do not exceed their containers */
-  max-height: 100%;
+  max-height: 120px;
   object-fit: cover;
+}
+.image-cell span {
+  font-size: 12px; /* Smaller font size for the title */
+  color: #333;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for better legibility */
+  margin-top: 5px; /* Space between image and title */
 }
 
 .nav-link {
