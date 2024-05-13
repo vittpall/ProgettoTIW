@@ -55,6 +55,7 @@ public class GoToAlbumPage extends HttpServlet {
     		Class.forName(driver);
     		connection = DriverManager.getConnection(url, user, password);
     		
+    		
         } catch (ClassNotFoundException e) {
             throw new UnavailableException("Can't load database driver");
         } catch (SQLException e) {
@@ -72,7 +73,17 @@ public class GoToAlbumPage extends HttpServlet {
     	boolean AvailableNext = false;
     	boolean AvailablePrev = false;
     	
-    	
+
+    	String albumTitleCurrent = (String) request.getSession().getAttribute("albumTitle");
+    	if(albumTitleCurrent != null)
+    	{
+    		if(!albumTitleCurrent.equals(AlbumCreator))
+    			Offset = 0;
+    	}
+    	else
+    		request.getSession().setAttribute("albumTitle", AlbumTitle);
+    		
+    		
     	if(NextPage != null && NextPage.equals("true"))
     	{
     		this.Offset += 5;
@@ -142,7 +153,8 @@ public class GoToAlbumPage extends HttpServlet {
     public void destroy() {
         try {
             if (connection != null) {
-                connection.close();
+            	connection.close();
+ 
             }
         } catch (SQLException sqle) {
         }
