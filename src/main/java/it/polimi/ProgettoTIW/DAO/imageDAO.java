@@ -20,7 +20,7 @@ public class imageDAO {
 
     public List<Image> findImagesByAlbum(String albumTitle, int albumCreator, int Offset) throws SQLException {
         List<Image> images = new ArrayList<>();
-        String query = "SELECT i.Image_id, i.Title, i.System_Path, i.Creation_Date, i.Description FROM `Image` i, Contains_Images c WHERE i.Image_id = c.Image_Id AND c.title = ? AND c.User_Id = ? LIMIT 6 OFFSET ?";
+        String query = "SELECT i.Image_id, i.Title, i.System_Path, i.Creation_Date, i.Description FROM `Image` i, Contains_Images c WHERE i.Image_id = c.Image_Id AND c.title = ? AND c.User_Id = ? ORDER BY c.Image_id DESC LIMIT 6 OFFSET ?";
         try (PreparedStatement pstatement = con.prepareStatement(query);) {
             pstatement.setString(1, albumTitle);
             pstatement.setInt(2, albumCreator);

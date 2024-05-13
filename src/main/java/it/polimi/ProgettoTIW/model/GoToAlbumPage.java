@@ -73,7 +73,19 @@ public class GoToAlbumPage extends HttpServlet {
     	boolean AvailableNext = false;
     	boolean AvailablePrev = false;
     	
-
+    	String albumTitleCurrent = (String) request.getSession().getAttribute("albumTitle");
+        if(albumTitleCurrent != null && albumTitleCurrent.equals(AlbumTitle)) {
+            if (NextPage != null && "true".equals(NextPage)) {
+                this.Offset += 5;
+            } else if (PrevPage != null && "true".equals(PrevPage)) {
+                this.Offset = Math.max(0, this.Offset - 5); // Ensure Offset doesn't go negative
+            }
+        } else {
+            this.Offset = 0;
+            request.getSession().setAttribute("albumTitle", AlbumTitle);
+        }
+    	
+    	/*
     	String albumTitleCurrent = (String) request.getSession().getAttribute("albumTitle");
     	if(albumTitleCurrent != null)
     	{
@@ -92,9 +104,10 @@ public class GoToAlbumPage extends HttpServlet {
     	{
     		if(PrevPage != null && PrevPage.equals("true"))
     		{
-    			this.Offset -= 5;
+    			this.Offset -= M;
     		}
     	}
+    	*/
 
         imageDAO imageDao = new imageDAO(connection);
         List<Image> images;
